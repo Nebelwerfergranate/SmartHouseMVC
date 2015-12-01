@@ -1,0 +1,95 @@
+﻿@{
+    Layout = null;
+    // microwaveNames
+    // ovenNames
+    // fridgeNames
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Smart House MVC</title>
+    <link rel="stylesheet" href="../../Content/Css/SmartHouseMVC.css"/>
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+
+    <script src="~/Scripts/script.js"></script>
+</head>
+<body>
+
+    <!--
+    Архаизмы:
+    js_DeviceName
+    js_AddButton
+    -->
+
+<div>
+    <!-- hidden -->
+    <div id="clock-dialog">
+        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+        {
+            @CreateDeviceDialog("clock")
+        }
+    </div>
+    <div id="microwave-dialog">
+        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+        {
+            @CreateDeviceDialog("microwave", ViewBag.microwaveNames)
+        }
+    </div>
+    <div id="oven-dialog">
+        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+        {
+            @CreateDeviceDialog("microwave", ViewBag.ovenNames)
+        }
+    </div>
+    <div id="fridge-dialog">
+        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+        {
+            @CreateDeviceDialog("microwave", ViewBag.fridgeNames)
+        }
+    </div>
+    <!-- end hidden -->
+    <div class="add-device-panel">
+        @CreateDevicePatelItem("../../Content/Images/clock.png", "clock-dialog")
+        @CreateDevicePatelItem("../../Content/Images/microwave.png", "microwave-dialog")
+        @CreateDevicePatelItem("../../Content/Images/oven.png", "oven-dialog")
+        @CreateDevicePatelItem("../../Content/Images/fridge.png", "fridge-dialog")
+    </div>
+</div>
+
+
+</body>
+</html>
+
+@helper CreateDeviceDialog(string device, string[] items = null)
+{
+    @Html.TextBox("name")
+    <input type="hidden" name="device" value="@device" />
+    if (items != null)
+    {
+        <select>
+            @foreach (string item in items)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    }
+    <input type="submit" value="Ок" />
+}
+
+@helper CreateDevicePatelItem(string src, string dialogId)
+{
+    <div>
+        <div class="image">
+            <img src="@src" />
+        </div>
+        <div class="add-device-control">
+            <input type="button" value="add" onclick="openDialog('@dialogId')"/>
+        </div>
+    </div>
+}
+

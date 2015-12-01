@@ -1,0 +1,112 @@
+﻿body {
+    font-size: 20px;
+    color: #323232;
+    font-weight: bold;
+}
+
+    body input[type="text"], body input[type="submit"], body input[type="button"], body button {
+        font-size: 15px;
+        color: #323232;
+        background: white;
+        border: 2px solid white;
+        border-radius: 6px;
+    }
+
+    body select {
+        font-size: 15px;
+        color: #323232;
+        background: white;
+        border: 2px solid white;
+        border-radius: 4px;
+    }
+
+    body input[type="submit"] {
+        cursor: pointer;
+    }
+
+
+.add-device-panel {
+    width: 816px;
+    height: 204px;
+    position: relative;
+    margin: 0 auto 20px auto;
+}
+
+    .add-device-panel > div {
+        width: 200px;
+        height: 200px;
+        float: left;
+        border: 2px solid #323232;
+        background: #AAECF9 none repeat scroll 0% 0%;
+    }
+
+.image {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 150px;
+    height: 150px;
+}
+
+.add-device-control {
+    border-top: 2px solid #323232;
+    height: 50px;
+}
+
+    .add-device-control input[type="button"] {
+        width: 100px;
+        height: 30px;
+        position: relative;
+        top: 9px;
+        left: 50px;
+    }
+
+/* jq-ui dialog */
+.ui-dialog {
+    /*высота задаётся в атрибуте sytle, устанавливается при вызове $(#)dialog(), но пусть лучше будет здесь*/
+    height: 170px !important;
+    background: #AAECF9 none repeat scroll 0% 0%;
+    border: 2px solid #323232;
+}
+
+.ui-dialog-titlebar {
+    cursor: move;
+    text-align: center;
+}
+
+.ui-dialog-titlebar-close {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    top: 125px;
+    left: 166px;
+}
+
+/* My */
+.ui-dialog-content > form > input[type=text] {
+    width: 196px;
+    height: 30px;
+    position: absolute;
+    left: 50px;
+    top: 34px;
+    padding: 0px;
+}
+
+.ui-dialog-content > form > select {
+    width: 200px;
+    height: 30px;
+    position: absolute;
+    top: 80px;
+    left: 50px;
+}
+
+.ui-dialog-content > form > input[type="submit"] {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    top: 125px;
+    left: 33px;
+}
+
+/********/
+
+
