@@ -4,25 +4,30 @@
     font-weight: bold;
 }
 
-    body input[type="text"], body input[type="submit"], body input[type="button"], body button {
-        font-size: 15px;
-        color: #323232;
-        background: white;
-        border: 2px solid white;
-        border-radius: 6px;
-    }
+a {
+    /* В ссылках во всём проекте лежат картинки */
+    color: transparent;
+}
 
-    body select {
-        font-size: 15px;
-        color: #323232;
-        background: white;
-        border: 2px solid white;
-        border-radius: 4px;
-    }
+body input[type="text"], body input[type="submit"], body input[type="button"], body button {
+    font-size: 15px;
+    color: #323232;
+    background: white;
+    border: 2px solid white;
+    border-radius: 6px;
+}
 
-    body input[type="submit"] {
-        cursor: pointer;
-    }
+body select {
+    font-size: 15px;
+    color: #323232;
+    background: white;
+    border: 2px solid white;
+    border-radius: 4px;
+}
+
+body input[type="submit"] {
+    cursor: pointer;
+}
 
 
 .add-device-panel {
@@ -59,6 +64,80 @@
         top: 9px;
         left: 50px;
     }
+
+.all-devices-container {
+    width: 1108px;
+    position: relative;
+    margin: auto;
+}
+
+.device-container {
+    width: 511px;
+    height: 260px;
+    border: 2px solid #323232;
+    float: left;
+    margin: 10px;
+    background: #AAECF9 none repeat scroll 0% 0%;
+}
+
+    .device-container > .device-basic {
+        width: 200px;
+        height: 260px;
+        float: left;
+        border-right: 1px solid black;
+        /*Аналог border-collapse*/
+        margin-right: -1px;
+    }
+    
+        .device-container > .device-basic > .device-control {
+            width: 200px;
+            height: 50px;
+            position: relative;
+        }
+
+.device-container > .device-basic > .device-name {
+    width: 200px;
+    height: 42px;
+    margin: 0px;
+    padding: 4px 0px;
+    position: relative;
+}
+
+    .device-container > .device-basic > .device-name > .device-name-label {
+        position: absolute;
+        top: 13px;
+        left: 20px;
+        width: 160px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+
+    .device-container > .device-basic > .device-control  .toogle-button {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        top: 15px;
+        left: 20px;
+    }
+
+    .device-container > .device-basic > .device-control  .rename-button {
+    position: absolute;
+    top: 15px;
+    left: 85px;
+    width: 30px;
+    height: 30px;
+}
+
+    .device-container > .device-basic > .device-control  .remove-button {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
+
 
 /* jq-ui dialog */
 .ui-dialog {
@@ -106,7 +185,6 @@
     top: 125px;
     left: 33px;
 }
-
 /********/
 
 

@@ -15,12 +15,28 @@
 //  js_TemperatureSetSubmit
 //  js_TemperatureSetField
 
-function openDialog(id) {
+function closeAllDialogs() {
     $("#clock-dialog").dialog('close');
     $("#microwave-dialog").dialog('close');
     $("#oven-dialog").dialog('close');
     $("#fridge-dialog").dialog('close');
+    $("#rename-dialog").dialog('close');
+}
+
+function openDialog(id) {
+    closeAllDialogs();
     $("#" + id).dialog('open');
+}
+
+function rename(deviceId, oldName) {
+    if (oldName == undefined) {
+        oldName = "";
+    }
+    closeAllDialogs();
+    document.getElementById("renameId").value = deviceId;
+    document.getElementById("newName").value = oldName;
+    $("#rename-dialog").dialog('open');
+    document.getElementById("newName").select();
 }
 
 $(document).ready(function () {
@@ -29,6 +45,7 @@ $(document).ready(function () {
     $("#oven-dialog").dialog({ autoOpen: false, title: "Add new oven" });
     $("#fridge-dialog").dialog({ autoOpen: false, title: "Add new fridge" });
 
+    $("#rename-dialog").dialog({ autoOpen: false, title: "Rename device" });
 
 
 //    $.scrollTo($.cookie("scrollTop"), 0);

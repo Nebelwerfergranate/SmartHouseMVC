@@ -43,32 +43,6 @@
         -->
 
     <div>
-        <!-- hidden -->
-        <div id="clock-dialog">
-            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-            {
-                @CreateDeviceDialog("clock")
-            }
-        </div>
-        <div id="microwave-dialog">
-            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-            {
-                @CreateDeviceDialog("microwave", ViewBag.microwaveNames)
-            }
-        </div>
-        <div id="oven-dialog">
-            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-            {
-                @CreateDeviceDialog("oven", ViewBag.ovenNames)
-            }
-        </div>
-        <div id="fridge-dialog">
-            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-            {
-                @CreateDeviceDialog("fridge", ViewBag.fridgeNames)
-            }
-        </div>
-        <!-- end hidden -->
         <div class="add-device-panel">
             @CreateDevicePanelItem("../../Content/Images/clock.png", "clock-dialog")
             @CreateDevicePanelItem("../../Content/Images/microwave.png", "microwave-dialog")
@@ -82,24 +56,49 @@
                 @CreateDevice(pair.Key, pair.Value)
             }
         </div>
+        <!-- hidden -->
+        @CreateDeviceDialog("clock-dialog", "clock")
+        @CreateDeviceDialog("microwave-dialog", "microwave", ViewBag.microwaveNames)
+        @CreateDeviceDialog("oven-dialog", "oven", ViewBag.ovenNames)
+        @CreateDeviceDialog("fridge-dialog", "fridge", ViewBag.fridgeNames)
+
+        @CreateRenameDialog("rename-dialog")
+        <!-- end hidden -->
     </div>
 </body>
 </html>
 
-@helper CreateDeviceDialog(string device, string[] items = null)
+@helper CreateDeviceDialog(string dialogId, string device, string[] items = null)
 {
-    @Html.TextBox("name")
-    <input type="hidden" name="device" value="@device" />
-    if (items != null)
-    {
-        <select name="fabricator">
-            @foreach (string item in items)
+    <div id="@dialogId">
+        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+        {
+            @Html.TextBox("name")
+            <input type="hidden" name="device" value="@device" />
+            if (items != null)
             {
-                <option value="@item">@item</option>
+                <select name="fabricator">
+                    @foreach (string item in items)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
             }
-        </select>
-    }
-    <input type="submit" value="Ок" />
+            <input type="submit" value="Ок" />
+        }
+    </div>
+}
+
+@helper CreateRenameDialog(string dialogID)
+{
+    <div id="@dialogID">
+        @using (Html.BeginForm("RenameDevice", "Home", FormMethod.Post))
+        {
+            @Html.TextBox("newName")
+            <input type="hidden" id="renameId" name="id" />
+            <input type="submit" value="Ok" />
+        }
+    </div>
 }
 
 @helper CreateDevicePanelItem(string src, string dialogId)
@@ -120,16 +119,39 @@
         <div class="device-basic">
             <!-- device-basic -->
             <div class="device-control">
-                <a><img src="" alt="Toggle" /></a>
-                <a><img src="~/Content/Images/remove.png" alt="Remove" /></a>
-                <a><img src="~/Content/Images/rename.png" alt="Rename" /></a>
+                <a href="/Home/ToogleDevice?id=@id">
+                    @if (device.IsOn)
+                    {
+                        <img src="~/Content/Images/on.png" alt="Toggle" class="toogle-button"/>
+                    }
+                    else
+                    {
+                        <img src="~/Content/Images/off.png" alt="Toggle" class="toogle-button"/>
+                    }
+                </a>
+                <a href="/Home/RemoveDevice?id=@id"><img src="~/Content/Images/remove.png" alt="Remove" class="rename-button"/></a>
+                <input type="image" src="~/Content/Images/rename.png" alt="Rename" onclick="rename(@id, '@device.Name')" class="remove-button"/>
             </div>
             <div class="device-name">
-                <span id="Name" class="device-name-label"></span>
+                <span id="Name" class="device-name-label">@device.Name</span>
             </div>
             <div class="image">
-                <asp:Image runat="server" ID="DeviceImage" />
-
+                @if (device is Clock)
+                {
+                    <img src="~/Content/Images/clock.png" alt="clock"/>
+                }
+                else if (device is Microwave)
+                {
+                    <img src="~/Content/Images/microwave.png" alt="microwave"/>
+                }
+                else if (device is Oven)
+                {
+                    <img src="~/Content/Images/oven.png" alt="oven"/>
+                }
+                else if (device is Fridge)
+                {
+                    <img src="~/Content/Images/fridge.png" alt="fridge"/>
+                }
             </div>
         </div>
         <!-- device-device-interfaces -->

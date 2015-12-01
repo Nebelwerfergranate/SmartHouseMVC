@@ -23,7 +23,7 @@ namespace SmartHouseMVC.Controllers
             ViewBag.microwaveNames = microwaveNames;
             ViewBag.ovenNames = ovenNames;
             ViewBag.fridgeNames = fridgeNames;
-            
+
             return View(deviceManager.GetDevices());
         }
 
@@ -43,6 +43,44 @@ namespace SmartHouseMVC.Controllers
                 case "fridge":
                     deviceManager.AddFridge(name, fabricator);
                     break;
+            }
+            return Redirect("/Home/Index");
+        }
+
+        public RedirectResult RenameDevice(int? id, string newName = "")
+        {
+            if (id != null && id >= 0)
+            {
+                deviceManager.RenameById((uint)id, newName);
+            }
+            return Redirect("/Home/Index");
+        }
+
+        public RedirectResult RemoveDevice(int? id)
+        {
+            if (id != null && id >= 0)
+            {
+                deviceManager.RemoveById((uint)id);
+            }
+            return Redirect("/Home/Index");
+        }
+
+        public RedirectResult ToogleDevice(int? id)
+        {
+            if (id != null && id >= 0)
+            {
+                Device device = deviceManager.GetDeviceById((uint) id);
+                if (device != null)
+                {
+                    if (device.IsOn)
+                    {
+                        device.TurnOff();
+                    }
+                    else
+                    {
+                        device.TurnOn();
+                    }
+                }
             }
             return Redirect("/Home/Index");
         }
