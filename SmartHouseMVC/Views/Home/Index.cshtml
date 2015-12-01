@@ -1,5 +1,8 @@
-﻿@{
+﻿@using SmartHouse
+@model System.Collections.Generic.IDictionary<uint, Device>
+@{
     Layout = null;
+    // ViewBag props
     // microwaveNames
     // ovenNames
     // fridgeNames
@@ -10,9 +13,9 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-basic-width" />
     <title>Smart House MVC</title>
-    <link rel="stylesheet" href="../../Content/Css/SmartHouseMVC.css"/>
+    <link rel="stylesheet" href="../../Content/Css/SmartHouseMVC.css" />
     <script src="~/Scripts/jquery-2.1.4.min.js"></script>
     <script src="~/Scripts/jquery-ui.min.js"></script>
 
@@ -24,44 +27,62 @@
     Архаизмы:
     js_DeviceName
     js_AddButton
-    -->
 
-<div>
-    <!-- hidden -->
-    <div id="clock-dialog">
-        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-        {
-            @CreateDeviceDialog("clock")
-        }
-    </div>
-    <div id="microwave-dialog">
-        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-        {
-            @CreateDeviceDialog("microwave", ViewBag.microwaveNames)
-        }
-    </div>
-    <div id="oven-dialog">
-        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-        {
-            @CreateDeviceDialog("microwave", ViewBag.ovenNames)
-        }
-    </div>
-    <div id="fridge-dialog">
-        @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
-        {
-            @CreateDeviceDialog("microwave", ViewBag.fridgeNames)
-        }
-    </div>
-    <!-- end hidden -->
-    <div class="add-device-panel">
-        @CreateDevicePatelItem("../../Content/Images/clock.png", "clock-dialog")
-        @CreateDevicePatelItem("../../Content/Images/microwave.png", "microwave-dialog")
-        @CreateDevicePatelItem("../../Content/Images/oven.png", "oven-dialog")
-        @CreateDevicePatelItem("../../Content/Images/fridge.png", "fridge-dialog")
-    </div>
-</div>
+    Проверить.
+    js_HoursSetField
+    js_MinutesSetField
+    js_TimeSetSubmit
 
+    js_ITemperatureDiv
+    js_TemperatureSetField
+    js_TemperatureSetSubmit
 
+    js_ITimerDiv
+    js_SecondsSetField
+
+        -->
+
+    <div>
+        <!-- hidden -->
+        <div id="clock-dialog">
+            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+            {
+                @CreateDeviceDialog("clock")
+            }
+        </div>
+        <div id="microwave-dialog">
+            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+            {
+                @CreateDeviceDialog("microwave", ViewBag.microwaveNames)
+            }
+        </div>
+        <div id="oven-dialog">
+            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+            {
+                @CreateDeviceDialog("oven", ViewBag.ovenNames)
+            }
+        </div>
+        <div id="fridge-dialog">
+            @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
+            {
+                @CreateDeviceDialog("fridge", ViewBag.fridgeNames)
+            }
+        </div>
+        <!-- end hidden -->
+        <div class="add-device-panel">
+            @CreateDevicePanelItem("../../Content/Images/clock.png", "clock-dialog")
+            @CreateDevicePanelItem("../../Content/Images/microwave.png", "microwave-dialog")
+            @CreateDevicePanelItem("../../Content/Images/oven.png", "oven-dialog")
+            @CreateDevicePanelItem("../../Content/Images/fridge.png", "fridge-dialog")
+        </div>
+
+        <div class="all-devices-container">
+            @foreach (KeyValuePair<uint, Device> pair in Model)
+            {
+                @CreateDevice(pair.Key, pair.Value)
+            }
+        </div>
+    </div>
 </body>
 </html>
 
@@ -71,7 +92,7 @@
     <input type="hidden" name="device" value="@device" />
     if (items != null)
     {
-        <select>
+        <select name="fabricator">
             @foreach (string item in items)
             {
                 <option value="@item">@item</option>
@@ -81,15 +102,131 @@
     <input type="submit" value="Ок" />
 }
 
-@helper CreateDevicePatelItem(string src, string dialogId)
+@helper CreateDevicePanelItem(string src, string dialogId)
 {
     <div>
         <div class="image">
             <img src="@src" />
         </div>
         <div class="add-device-control">
-            <input type="button" value="add" onclick="openDialog('@dialogId')"/>
+            <input type="button" value="add" onclick="openDialog('@dialogId')" />
         </div>
     </div>
 }
 
+@helper CreateDevice(uint id, Device device)
+{
+    <div class="device-container">
+        <div class="device-basic">
+            <!-- device-basic -->
+            <div class="device-control">
+                <a><img src="" alt="Toggle" /></a>
+                <a><img src="~/Content/Images/remove.png" alt="Remove" /></a>
+                <a><img src="~/Content/Images/rename.png" alt="Rename" /></a>
+            </div>
+            <div class="device-name">
+                <span id="Name" class="device-name-label"></span>
+            </div>
+            <div class="image">
+                <asp:Image runat="server" ID="DeviceImage" />
+
+            </div>
+        </div>
+        <!-- device-device-interfaces -->
+        <div class="device-interfaces">
+            <div class="device-interfaces-small">
+                <div>
+                    <!-- IOpenable -->
+                    <a><img src="" alt="OpenClose" /></a>
+                    <!-- IBacklight -->
+                    <img src="" alt="IsHighlightedImage" />
+                </div>
+                <!-- IVolume -->
+                <div>
+                    <span></span>
+                </div>
+            </div>
+            <!-- IClock -->
+            <div class="js_IClockDiv">
+                <input type="hidden" />
+                <div class="js_dynamicClockDiv">This div will be turned into a dynamic clock</div>
+                @using (Html.BeginForm())
+                {
+                    <input type="number" maxlength="2" min="0" max="23" class="js_HoursSetField" required="required" />
+                    <span>:</span>
+                    <input type="number" maxlength="2" min="0" max="59" class="js_MinutesSetField" required="required" />
+                    <input type="submit" value="Set Time" class="js_TimeSetSubmit" />
+                }
+            </div>
+            <!-- ITemperature -->
+            <div class="js_ITemperatureDiv">
+                @using (Html.BeginForm())
+                {
+                    <input type="number" maxlength="5" min="" max="" class="js_TemperatureSetField" />
+                    <input type="submit" value="Set temperature" class="js_TemperatureSetSubmit" />
+                }
+            </div>
+            <!-- ITimer -->
+            <div class="js_ITimerDiv">
+                @using (Html.BeginForm())
+                {
+                    <input type="number" maxlength="2" min="0" max="23" class="js_HoursSetField" required="required" />
+                    <span>:</span>
+                    <input type="number" maxlength="2" min="0" max="59" class="js_MinutesSetField" required="required" />
+                    <span>:</span>
+                    <input type="number" maxlength="2" min="0" max="59" class="js_SecondsSetField" required="required" />
+                    <input type="submit" value="Set Timer" class="js_TimeSetSubmit" />
+                    <a><img src="" alt="StartStop" /></a>
+                }
+            </div>
+            <!-- Fridge -->
+            <div class="fridge">
+                <!-- Coldstore -->
+                <div class="device-interfaces">
+                    <div class="device-interfaces-small">
+                        <div>
+                            <!-- IOpenable -->
+                            <a><img src="" alt="OpenClose" /></a>
+                            <!-- IBacklight -->
+                            <img src="" alt="IsHighlightedImage" />
+                        </div>
+                        <!-- IVolume -->
+                        <div>
+                            <span></span>
+                        </div>
+                    </div>
+                    <!-- ITemperature -->
+                    <div class="js_ITemperatureDiv">
+                        @using (Html.BeginForm())
+                        {
+                            <input type="number" maxlength="5" min="" max="" class="js_TemperatureSetField" />
+                            <input type="submit" value="Set temperature" class="js_TemperatureSetSubmit" />
+                        }
+                    </div>
+                </div>
+
+                <!-- Freezer -->
+                <div class="device-interfaces">
+                    <div class="device-interfaces-small">
+                        <div>
+                            <!-- IOpenable -->
+                            <a><img src="" alt="OpenClose" /></a>
+                        </div>
+                        <!-- IVolume -->
+                        <div>
+                            <span></span>
+                        </div>
+                    </div>
+                    <!-- ITemperature -->
+                    <div class="js_ITemperatureDiv">
+                        @using (Html.BeginForm())
+                        {
+                            <input type="number" maxlength="5" min="" max="" class="js_TemperatureSetField" />
+                            <input type="submit" value="Set temperature" class="js_TemperatureSetSubmit" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

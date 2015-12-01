@@ -84,7 +84,11 @@
     <Content Include="Content\Images\clock.png" />
     <Content Include="Content\Images\fridge.png" />
     <Content Include="Content\Images\microwave.png" />
+    <Content Include="Content\Images\off.png" />
+    <Content Include="Content\Images\on.png" />
     <Content Include="Content\Images\oven.png" />
+    <Content Include="Content\Images\remove.png" />
+    <Content Include="Content\Images\rename.png" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />

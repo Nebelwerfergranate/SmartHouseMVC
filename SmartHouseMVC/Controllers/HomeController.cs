@@ -23,9 +23,8 @@ namespace SmartHouseMVC.Controllers
             ViewBag.microwaveNames = microwaveNames;
             ViewBag.ovenNames = ovenNames;
             ViewBag.fridgeNames = fridgeNames;
-
-            Clock clock = new Clock("myClock");
-            return View();
+            
+            return View(deviceManager.GetDevices());
         }
 
         public RedirectResult AddDevice(string device = "", string name = "", string fabricator = "")

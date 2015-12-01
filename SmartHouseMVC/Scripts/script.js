@@ -1,7 +1,7 @@
 ﻿// Данные Css классы используются для работы скриптов.
 // Их переименование обязательно должно быть синхронизировано с серверным кодом
-//  js_AddButton
-//	js_NewDeviceName
+//  js_AddButton                больше не нужен
+//	js_NewDeviceName            больше не нужен
 //  js_RenameButton
 //  js_IClockDiv
 //  js_dynamicClockDiv   

@@ -87,10 +87,6 @@ namespace SmartHouseWF.Models.DeviceManager
             newDeviceID++;
             context.Session["devices"] = GetDevices();
             context.Session["newDeviceID"] = newDeviceID;
-            // Обновление страницы браузера должно работать корректно...
-            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.RawUrl);
-            //Repeater1.DataSource = deviceManager.GetDevices();
-            //Repeater1.DataBind();
         }
         public void RemoveById(uint id)
         {
