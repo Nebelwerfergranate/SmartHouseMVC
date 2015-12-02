@@ -88,56 +88,71 @@ body input[type="submit"] {
         /*Аналог border-collapse*/
         margin-right: -1px;
     }
-    
+
         .device-container > .device-basic > .device-control {
             width: 200px;
             height: 50px;
             position: relative;
         }
 
-.device-container > .device-basic > .device-name {
-    width: 200px;
-    height: 42px;
-    margin: 0px;
-    padding: 4px 0px;
-    position: relative;
-}
+        .device-container > .device-basic > .device-name {
+            width: 200px;
+            height: 42px;
+            margin: 0px;
+            padding: 4px 0px;
+            position: relative;
+        }
 
-    .device-container > .device-basic > .device-name > .device-name-label {
-        position: absolute;
-        top: 13px;
-        left: 20px;
-        width: 160px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
+            .device-container > .device-basic > .device-name > .device-name-label {
+                position: absolute;
+                top: 13px;
+                left: 20px;
+                width: 160px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: center;
+            }
+
+        .device-container > .device-basic > .device-control .toogle-button {
+            height: 30px;
+            width: 30px;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+        }
+
+        .device-container > .device-basic > .device-control .rename-button {
+            position: absolute;
+            top: 15px;
+            left: 85px;
+            width: 30px;
+            height: 30px;
+        }
+
+        .device-container > .device-basic > .device-control .remove-button {
+            height: 30px;
+            width: 30px;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+
+    .device-container > .device-interfaces {
+        border-left: 1px solid black;
+        height: 250px;
+        width: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 5px;
     }
-
-    .device-container > .device-basic > .device-control  .toogle-button {
-        height: 30px;
-        width: 30px;
-        position: absolute;
-        top: 15px;
-        left: 20px;
+/* Отстальное фуфел. Перепозиционировать с падингов марджинов на нормальное */
+    .device-container > .device-interfaces > .device-interfaces-small img {
+        width: 100px;
+        height: 50px;
+        /*margin-top: 5px;
+        margin-left: 30px;*/
     }
-
-    .device-container > .device-basic > .device-control  .rename-button {
-    position: absolute;
-    top: 15px;
-    left: 85px;
-    width: 30px;
-    height: 30px;
-}
-
-    .device-container > .device-basic > .device-control  .remove-button {
-        height: 30px;
-        width: 30px;
-        position: absolute;
-        top: 15px;
-        right: 20px;
-    }
-
 
 /* jq-ui dialog */
 .ui-dialog {
@@ -186,5 +201,24 @@ body input[type="submit"] {
     left: 33px;
 }
 /********/
+
+.jqclock {
+    float: left;
+    position: relative;
+    top: 9px;
+    text-align: center;
+    display: inline-block;
+    width: 80px;
+}
+
+.clocktime {
+    border: 2px solid white;
+    background: #323232;
+    padding: 5px;
+    font-size: 14px;
+    font-family: "Courier";
+    color: white;
+    display: block;
+}
 
 

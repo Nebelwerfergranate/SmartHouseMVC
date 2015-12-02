@@ -67,7 +67,7 @@
         {
             get { return freezer.MaxTemperature; }
         }
-        public double FreezeryVolume
+        public double FreezerVolume
         {
             get { return freezer.Volume; }
         }

@@ -14,5 +14,10 @@ namespace SmartHouseMVC
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            // Положение экрана со времени последнего запроса храниться в куках.
+            Response.Cookies["scrollTop"].Value = 0.ToString();
+        }
     }
 }
