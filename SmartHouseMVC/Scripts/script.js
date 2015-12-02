@@ -38,18 +38,7 @@ function rename(deviceId, oldName) {
 }
 
 $(document).ready(function () {
-    $("#clock-dialog").dialog({ autoOpen: false, title: "Add new clock" });
-    $("#microwave-dialog").dialog({ autoOpen: false, title: "Add new microwave" });
-    $("#oven-dialog").dialog({ autoOpen: false, title: "Add new oven" });
-    $("#fridge-dialog").dialog({ autoOpen: false, title: "Add new fridge" });
-
-    $("#rename-dialog").dialog({ autoOpen: false, title: "Rename device" });
-    
     $.scrollTo($.cookie("scrollTop"), 0);
-
-    $(document).scroll(function () {
-        $.cookie("scrollTop", $(document).scrollTop());
-    });
 
     // IClock
     $(".js_IClockDiv").each(function (index, value) {
@@ -63,5 +52,16 @@ $(document).ready(function () {
             timestamp = parseInt(timestamp);
         }
         $(clockElement).myClock({ "timestamp": timestamp, "disabled": disabled });
+    });
+
+    $("#clock-dialog").dialog({ autoOpen: false, title: "Add new clock" });
+    $("#microwave-dialog").dialog({ autoOpen: false, title: "Add new microwave" });
+    $("#oven-dialog").dialog({ autoOpen: false, title: "Add new oven" });
+    $("#fridge-dialog").dialog({ autoOpen: false, title: "Add new fridge" });
+
+    $("#rename-dialog").dialog({ autoOpen: false, title: "Rename device" });
+    
+    $(document).scroll(function () {
+        $.cookie("scrollTop", $(document).scrollTop());
     });
 });

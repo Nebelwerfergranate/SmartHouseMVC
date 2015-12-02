@@ -11,7 +11,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-basic-width" />
     <title>Smart House MVC</title>
@@ -76,7 +76,7 @@
             <img src="@src" />
         </div>
         <div class="add-device-control">
-            <input type="button" value="add" onclick="openDialog('@dialogId')" />
+            <input type="button" value="Add" onclick="openDialog('@dialogId')" />
         </div>
     </div>
 }
@@ -162,7 +162,7 @@
                 {
                     IVolume ivolumeObj = (IVolume)device;
                     <!-- IVolume -->
-                    <div>
+                    <div class="ivolume">
                         <span>Interior space: @ivolumeObj.Volume litres</span>
                     </div>
                 }
@@ -170,7 +170,7 @@
             @if (device is IClock)
             {
                 <!-- IClock -->
-                <div class="js_IClockDiv">
+                <div class="js_IClockDiv iclock">
                     @if (device.IsOn)
                     {
                         DateTime curTime = ((IClock)device).CurrentTime;
@@ -186,17 +186,17 @@
                         <input type="hidden" class="js_Timestamp" value="@hiddenValue" />
                     }
 
-                    <div class="js_DynamicClockDiv">This div will be turned into a dynamic clock</div>
+                    <div class="js_DynamicClockDiv"></div>
 
                     @if (device.IsOn)
                     {
                         using (Html.BeginForm("SetTime", "Home", new { id = deviceId }, FormMethod.Post))
                         {
-                            <input type="number" maxlength="2" min="0" max="23"
-                                   name="hours" required="required" />
-                            <span>:</span>
-                            <input type="number" maxlength="2" min="0" max="59"
-                                   name="minutes" required="required" />
+                            <input type="number" min="0" max="23"
+                                   name="hours" required="required" maxlength="2" />
+                            <span class="unselectable">:</span>
+                            <input type="number" min="0" max="59"
+                                   name="minutes" required="required" maxlength="2" />
                             <input type="submit" value="Set Time" />
                         }
                     }
@@ -206,36 +206,36 @@
             {
                 <!-- ITemperature -->
                 ITemperature itemperatureObj = (ITemperature)device;
-                string title = "Set value between " + itemperatureObj.MinTemperature +
-                            " and " + itemperatureObj.MaxTemperature;
-                            <div>
-                                @using (Html.BeginForm("SetTemperature", "Home", new { id = deviceId }, FormMethod.Post))
-                                {
-                                    <input type="number" maxlength="5" min="@itemperatureObj.MinTemperature"
-                                           max="@itemperatureObj.MaxTemperature"
-                                           value="@itemperatureObj.Temperature" name="temperature" required="required"
-                                           title="@title" />
-                                    <input type="submit" value="Set temperature" />
-                                }
-                            </div>
+                string title = "Set value between " + itemperatureObj.MinTemperature + " and " + itemperatureObj.MaxTemperature;
+
+                <div class="itemperature">
+                    @using (Html.BeginForm("SetTemperature", "Home", new { id = deviceId }, FormMethod.Post))
+                    {
+                        <input type="number" maxlength="5" min="@itemperatureObj.MinTemperature"
+                               max="@itemperatureObj.MaxTemperature"
+                               value="@itemperatureObj.Temperature" name="temperature" required="required"
+                               title="@title" />
+                        <input type="submit" value="Set Temperature" />
+                    }
+                </div>
             }
             @if (device is ITimer)
             {
                 if (device.IsOn)
                 {
                   <!-- ITimer -->
-                    <div class="js_ITimerDiv">
+                    <div class="itimer">
                         @using (Html.BeginForm("TimerSet", "Home", new { id = deviceId }, FormMethod.Post))
                         {
                             if (device is Microwave == false)
                             {
                                 <input type="number" maxlength="2" min="0" max="23"
                                        name="hours" />
-                                <span>:</span>
+                                <span class="unselectable">:</span>
                             }
                             <input type="number" maxlength="2" min="0" max="59"
                                    name="minutes" />
-                            <span>:</span>
+                            <span class="unselectable">:</span>
                             <input type="number" maxlength="2" min="0" max="59"
                                    name="seconds" />
                             <input type="submit" value="Set Timer" />
@@ -259,7 +259,7 @@
                 <!-- Fridge -->
                 <div class="fridge">
                     <!-- Coldstore -->
-                    <div class="device-interfaces">
+                    <div>
                         <div class="device-interfaces-small">
                             <div>
                                 <!-- Open/CLose -->
@@ -285,13 +285,13 @@
                                          title="Lamp power: @fridge.ColdstoreLampPower W" />
                                 }
                             </div>
-                            <div>
+                            <div class="ivolume">
                                 <!-- Volume -->
                                 <span>Interior space: @fridge.ColdstoreVolume litres</span>
                             </div>
                         </div>
                         <!-- Temperature -->
-                        <div>
+                        <div class="itemperature">
                             @using (Html.BeginForm("SetColdstoreTemperature", "Home", new { id = deviceId }, FormMethod.Post))
                             {
                                 string title = "Set value between " + fridge.ColdstoreMinTemperature +
@@ -300,12 +300,12 @@
                                        max="@fridge.ColdstoreMaxTemperature"
                                        value="@fridge.ColdstoreTemperature" name="temperature" required="required"
                                        title="@title" />
-                                <input type="submit" value="Set temperature" />
+                                <input type="submit" value="Set Temperature" />
                             }
                         </div>
                     </div>
                     <!-- Freezer -->
-                    <div class="device-interfaces">
+                    <div>
                         <div class="device-interfaces-small">
                             <div>
                                 <!-- Open/CLose -->
@@ -320,13 +320,13 @@
                                     }
                                 </a>
                             </div>
-                            <div>
+                            <div class="ivolume">
                                 <!-- Volume -->
                                 <span>Interior space: @fridge.FreezerVolume litres</span>
                             </div>
                         </div>
                         <!-- Temperature -->
-                        <div>
+                        <div class="itemperature">
                             @using (Html.BeginForm("SetFreezerTemperature", "Home", new { id = deviceId }, FormMethod.Post))
                             {
                                 string title = "Set value between " + fridge.FreezerMinTemperature +
@@ -335,7 +335,7 @@
                                        max="@fridge.FreezerMaxTemperature"
                                        value="@fridge.FreezerTemperature" name="temperature" required="required"
                                        title="@title" />
-                                <input type="submit" value="Set temperature" />
+                                <input type="submit" value="Set Temperature" />
                             }
                         </div>
                     </div>
@@ -347,10 +347,10 @@
 
 @helper CreateDeviceDialog(string dialogId, string device, string[] items = null)
 {
-    <div id="@dialogId">
+    <div id="@dialogId" class="hidden">
         @using (Html.BeginForm("AddDevice", "Home", FormMethod.Post))
         {
-            @Html.TextBox("name")
+            @Html.TextBox("name", null, new { autocomplete = "off" })
             <input type="hidden" name="device" value="@device" />
             if (items != null)
             {
@@ -368,10 +368,10 @@
 
 @helper CreateRenameDialog(string dialogID)
 {
-    <div id="@dialogID">
+    <div id="@dialogID" class="hidden">
         @using (Html.BeginForm("RenameDevice", "Home", FormMethod.Post))
         {
-            @Html.TextBox("newName")
+            @Html.TextBox("newName", null, new { autocomplete = "off" })
             <input type="hidden" id="renameId" name="id" />
             <input type="submit" value="Ok" />
         }
