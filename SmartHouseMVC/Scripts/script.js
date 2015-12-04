@@ -38,7 +38,7 @@ function rename(deviceId, oldName) {
 }
 
 $(document).ready(function () {
-    $.scrollTo($.cookie("scrollTop"), 0);
+    window.scroll($.cookie("scrollLeft"), $.cookie("scrollTop"));
 
     // IClock
     $(".js_IClockDiv").each(function (index, value) {
@@ -63,5 +63,6 @@ $(document).ready(function () {
     
     $(document).scroll(function () {
         $.cookie("scrollTop", $(document).scrollTop());
+        $.cookie("scrollLeft", $(document).scrollLeft());
     });
 });

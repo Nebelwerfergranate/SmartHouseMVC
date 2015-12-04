@@ -91,8 +91,6 @@ body input[type="submit"] {
         height: 260px;
         float: left;
         border-right: 1px solid black;
-        /*Аналог border-collapse*/
-        margin-right: -1px;
     }
 
         .device-container > .device-basic > .device-control {
@@ -145,9 +143,7 @@ body input[type="submit"] {
         }
 
     .device-container > .device-interfaces {
-        border-left: 1px solid black;
         height: 250px;
-        width: 300px;
         overflow-x: hidden;
         overflow-y: auto;
         padding: 5px;

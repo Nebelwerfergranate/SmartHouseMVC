@@ -18,6 +18,7 @@ namespace SmartHouseMVC
         {
             // Положение экрана со времени последнего запроса храниться в куках.
             Response.Cookies["scrollTop"].Value = 0.ToString();
+            Response.Cookies["scrollLeft"].Value = 0.ToString();
         }
     }
 }

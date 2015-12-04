@@ -100,7 +100,6 @@
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.myClock.js" />
-    <Content Include="Scripts\jquery.scrollTo.js" />
     <Content Include="Scripts\script.js" />
     <Content Include="Web.config" />
   </ItemGroup>
