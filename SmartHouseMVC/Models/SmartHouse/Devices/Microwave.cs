@@ -7,9 +7,9 @@ namespace SmartHouse
         // Fields
         private readonly Clock clock = new Clock("built-in_clock");
 
-        private readonly Lamp backlight;
+        private readonly Lamp backlight = new Lamp();
 
-        private readonly double volume;
+        private double volume;
 
         private readonly System.Timers.Timer timer = new System.Timers.Timer();
         private bool isRunning;
@@ -18,6 +18,7 @@ namespace SmartHouse
 
 
         // Constructors
+        public Microwave() { }
         public Microwave(string name, double volume, Lamp lamp)
             : base(name)
         {
@@ -58,25 +59,31 @@ namespace SmartHouse
         public bool IsRunning
         {
             get { return isRunning; }
+            set { isRunning = value; }
         }
 
         public bool IsOpen
         {
             get { return isOpen; }
+            set { isOpen = value; }
         }
 
         public bool IsHighlighted
         {
             get { return backlight.IsOn; }
+            set { backlight.IsOn = value; }
         }
         public double LampPower
         {
             get { return backlight.Power; }
+            set { backlight.Power = value; }
         }
+
 
         public double Volume
         {
             get { return volume; }
+            set { volume = value; }
         }
 
 

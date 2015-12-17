@@ -5,14 +5,13 @@ namespace SmartHouse
     public class Clock : Device, IClock
     {
         // Fields
-        private TimeSpan delta;
+        private TimeSpan delta = -DateTime.Now.TimeOfDay;
 
 
         // Constructors
-        public Clock(string name) : base(name)
-        {
-            delta = -DateTime.Now.TimeOfDay;
-        }
+        public Clock() { }
+        public Clock(string name)
+            : base(name) { }
         public Clock(string name, DateTime time)
             : this(name)
         {
@@ -25,7 +24,7 @@ namespace SmartHouse
         {
             get
             {
-                    return DateTime.Now + delta;
+                return DateTime.Now + delta;
             }
             set
             {

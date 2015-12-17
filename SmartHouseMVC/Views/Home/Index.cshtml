@@ -1,5 +1,5 @@
 ﻿@using SmartHouse
-@model System.Collections.Generic.IDictionary<uint, Device>
+@model System.Collections.Generic.IDictionary<int, Device>
 @{
     Layout = null;
     // ViewBag props
@@ -52,7 +52,7 @@
         </div>
 
         <div class="all-devices-container">
-            @foreach (KeyValuePair<uint, Device> pair in Model)
+            @foreach (KeyValuePair<int, Device> pair in Model)
             {
                 @CreateDevice(pair.Key, pair.Value)
             }
@@ -81,7 +81,7 @@
     </div>
 }
 
-@helper CreateDevice(uint deviceId, Device device)
+@helper CreateDevice(int deviceId, Device device)
 {
     <div class="device-container">
         <div class="device-basic">

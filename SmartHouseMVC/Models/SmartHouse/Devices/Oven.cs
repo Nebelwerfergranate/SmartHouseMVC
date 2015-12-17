@@ -5,11 +5,11 @@ namespace SmartHouse
     public class Oven : Device, ITemperature, IOpenable, IBacklight, ITimer, IVolume
     {
         // Fields
-        private readonly Lamp backlight;
+        private readonly Lamp backlight = new Lamp();
 
         private readonly System.Timers.Timer timer = new System.Timers.Timer();
 
-        private readonly double volume;
+        private double volume;
 
         private bool isRunning;
 
@@ -21,6 +21,7 @@ namespace SmartHouse
         
 
         // Constructors
+        public Oven() { }
         public Oven(string name, double volume, Lamp lamp) : base(name)
         {
             this.backlight = lamp;
@@ -79,25 +80,30 @@ namespace SmartHouse
         public bool IsOpen
         {
             get { return isOpen; }
+            set { isOpen = value; }
         }
 
         public bool IsHighlighted
         {
             get { return backlight.IsOn; }
+            set { backlight.IsOn = value; }
         }
         public double LampPower
         {
             get { return backlight.Power; }
+            set { backlight.Power = value; }
         }
 
         public bool IsRunning
         {
             get { return isRunning; }
+            set { isRunning = value; }
         }
 
         public double Volume
         {
             get { return volume; }
+            set { volume = value; }
         }
 
 

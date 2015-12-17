@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SmartHouse;
+using SmartHouseMVC.Models.DeviceManager;
 using SmartHouseWF.Models.DeviceManager;
 
 namespace SmartHouseMVC.Controllers
@@ -12,6 +13,7 @@ namespace SmartHouseMVC.Controllers
     {
         // Fields
         private SessionDeviceManager deviceManager = new SessionDeviceManager();
+        private DatabaseDeviceManager db = new DatabaseDeviceManager();
 
         // GET: Home
         public ActionResult Index()
@@ -24,26 +26,12 @@ namespace SmartHouseMVC.Controllers
             ViewBag.ovenNames = ovenNames;
             ViewBag.fridgeNames = fridgeNames;
 
-            return View(deviceManager.GetDevices());
+            return View(db.GetDevices());
         }
 
         public RedirectResult AddDevice(string device = "", string name = "", string fabricator = "")
         {
-            switch (device)
-            {
-                case "clock":
-                    deviceManager.AddClock(name);
-                    break;
-                case "microwave":
-                    deviceManager.AddMicrowave(name, fabricator);
-                    break;
-                case "oven":
-                    deviceManager.AddOven(name, fabricator);
-                    break;
-                case "fridge":
-                    deviceManager.AddFridge(name, fabricator);
-                    break;
-            }
+            db.AddDevice(device, name, fabricator);
             return Redirect("/Home/Index");
         }
 
@@ -56,11 +44,11 @@ namespace SmartHouseMVC.Controllers
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult RemoveDevice(uint? id)
+        public RedirectResult RemoveDevice(int id = 0)
         {
-            if (id != null)
+            if (id != 0)
             {
-                deviceManager.RemoveById((uint)id);
+                db.RemoveById(id);
             }
             return Redirect("/Home/Index");
         }

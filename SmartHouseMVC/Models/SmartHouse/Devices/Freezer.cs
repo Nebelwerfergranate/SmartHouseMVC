@@ -7,6 +7,7 @@
         private readonly double maxTemperature = -6;
 
         // Constructors
+        public Freezer() { }
         public Freezer(uint volume)
             : base("freezer", volume)
         {

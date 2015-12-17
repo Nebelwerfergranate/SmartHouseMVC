@@ -38,6 +38,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -109,6 +117,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Contexts\DeviceContext.cs" />
+    <Compile Include="Models\Contexts\DeviceContextInitializer.cs" />
+    <Compile Include="Models\DeviceManager\DatabaseDeviceManager.cs" />
+    <Compile Include="Models\DeviceManager\DeviceTableRow.cs" />
     <Compile Include="Models\DeviceManager\FridgeInfo.cs" />
     <Compile Include="Models\DeviceManager\MicrowaveInfo.cs" />
     <Compile Include="Models\DeviceManager\OvenInfo.cs" />
@@ -129,7 +141,6 @@
     <Compile Include="Models\SmartHouse\Interfaces\ITemperature.cs" />
     <Compile Include="Models\SmartHouse\Interfaces\ITimer.cs" />
     <Compile Include="Models\SmartHouse\Interfaces\IVolume.cs" />
-    <Compile Include="Models\Validator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

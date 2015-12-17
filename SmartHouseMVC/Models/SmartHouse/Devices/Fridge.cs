@@ -8,6 +8,11 @@
 
 
         // Constructors
+        public Fridge()
+        {
+            coldstore = new Coldstore();
+            freezer = new Freezer();
+        }
         public Fridge(string name, Coldstore coldstore, Freezer freezer) : base(name)
         {
             this.coldstore = coldstore;
@@ -19,6 +24,7 @@
         public bool ColdstoreIsOpen
         {
             get { return coldstore.IsOpen; }
+            set { coldstore.IsOpen = value; }
         }
         public double ColdstoreTemperature
         {
@@ -38,19 +44,23 @@
         public bool ColdstoreIsHighlighted
         {
             get { return coldstore.IsHighlighted; }
+            set { coldstore.IsHighlighted = value; }
         }
         public double ColdstoreLampPower
         {
             get { return coldstore.LampPower; }
+            set { coldstore.LampPower = value; }
         }
         public double ColdstoreVolume
         {
             get { return coldstore.Volume; }
+            set { coldstore.Volume = value; }
         }
 
         public bool FreezerIsOpen
         {
             get { return freezer.IsOpen; }
+            set { freezer.IsOpen = value; }
         }
         public double FreezerTemperature
         {
@@ -70,6 +80,7 @@
         public double FreezerVolume
         {
             get { return freezer.Volume; }
+            set { freezer.Volume = value; }
         }
 
 
