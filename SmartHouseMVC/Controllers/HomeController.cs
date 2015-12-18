@@ -35,11 +35,16 @@ namespace SmartHouseMVC.Controllers
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult RenameDevice(uint? id, string newName = "")
+        public RedirectResult RenameDevice(int? id, string newName = "")
         {
             if (id != null)
             {
-                deviceManager.RenameById((uint)id, newName);
+                Device device = db.GetDeviceById((int)id);
+                if (device != null)
+                {
+                    device.Name = newName;
+                    db.UpdateDeviceById((int)id, device);
+                }
             }
             return Redirect("/Home/Index");
         }
@@ -54,11 +59,11 @@ namespace SmartHouseMVC.Controllers
         }
 
         // Device
-        public RedirectResult ToogleDevice(uint? id)
+        public RedirectResult ToogleDevice(int? id)
         {
             if (id != null)
             {
-                Device device = deviceManager.GetDeviceById((uint) id);
+                Device device = db.GetDeviceById((int)id);
                 if (device != null)
                 {
                     if (device.IsOn)
@@ -69,20 +74,22 @@ namespace SmartHouseMVC.Controllers
                     {
                         device.TurnOn();
                     }
+                    db.UpdateDeviceById((int)id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
         
         //IClock
-        public RedirectResult SetTime(uint? id, uint? hours, uint? minutes)
+        public RedirectResult SetTime(int? id, uint? hours, uint? minutes)
         {
             if (id != null && hours != null && minutes != null && hours < 24 && minutes < 60)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById((int)id);
                 if (device != null && device is IClock)
                 {
                     ((IClock)device).CurrentTime = new DateTime(1, 1, 1, (int)hours, (int)minutes, 0);
+                    db.UpdateDeviceById((int)id, device);
                 }
             }
             return Redirect("/Home/Index");

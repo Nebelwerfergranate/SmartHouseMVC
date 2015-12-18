@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHouse
 {
     public class Clock : Device, IClock
     {
         // Fields
-        private TimeSpan delta = -DateTime.Now.TimeOfDay;
+        private long delta = -DateTime.Now.TimeOfDay.Ticks;
 
 
         // Constructors
@@ -20,16 +22,23 @@ namespace SmartHouse
 
 
         // Properties
+        [NotMapped] 
         public DateTime CurrentTime
         {
             get
             {
-                return DateTime.Now + delta;
+                return DateTime.Now + new TimeSpan(delta);
             }
             set
             {
-                delta = new TimeSpan(value.Hour, value.Minute, value.Second) - DateTime.Now.TimeOfDay;
+                delta = (new TimeSpan(value.Hour, value.Minute, value.Second) - DateTime.Now.TimeOfDay).Ticks;
             }
+        }
+
+        public long Delta
+        {
+            get { return delta; }
+            set { delta = value; }
         }
     }
 }

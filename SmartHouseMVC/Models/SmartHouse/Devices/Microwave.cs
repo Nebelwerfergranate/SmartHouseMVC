@@ -1,11 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHouse
 {
     public class Microwave : Device, IClock, ITimer, IOpenable, IBacklight, IVolume
     {
         // Fields
-        private readonly Clock clock = new Clock("built-in_clock");
 
         private readonly Lamp backlight = new Lamp();
 
@@ -22,6 +22,7 @@ namespace SmartHouse
         public Microwave(string name, double volume, Lamp lamp)
             : base(name)
         {
+            Clock = new Clock();
             this.backlight = lamp;
             if (volume < 10)
             {
@@ -50,10 +51,14 @@ namespace SmartHouse
 
 
         // Properties
+        public int MicrowaveBuiltInClockId { get; set; }
+
+        public virtual Clock Clock { get; set; }
+        [NotMapped]
         public DateTime CurrentTime
         {
-            get { return clock.CurrentTime; }
-            set { clock.CurrentTime = value; }
+            get { return Clock.CurrentTime; }
+            set { Clock.CurrentTime = value; }
         }
 
         public bool IsRunning
@@ -95,14 +100,14 @@ namespace SmartHouse
             {
                 backlight.TurnOn();
             }
-            clock.TurnOn();
+            Clock.TurnOn();
         }
         public override void TurnOff()
         {
             base.TurnOff();
             this.Stop();
             backlight.TurnOff();
-            clock.TurnOff();
+            Clock.TurnOff();
         }
 
         public void SetTimer(TimeSpan time)

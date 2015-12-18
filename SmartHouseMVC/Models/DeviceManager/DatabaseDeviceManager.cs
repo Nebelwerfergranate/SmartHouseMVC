@@ -28,17 +28,71 @@ namespace SmartHouseMVC.Models.DeviceManager
 
         public Device GetDeviceById(int id)
         {
-            int deviceTypeId = id / 10000;
-            int deviceId = id % 10000;
+            DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
             Device device = null;
-
-            switch (deviceTypeId)
+            switch (row.DeviceTypeId)
             {
                 case 1:
-                    device = _deviceContext.Clocks.Find(deviceId);
+                    device = row.Clock;
+                    break;
+                case 2:
+                    device = row.Microwave;
+                    break;
+                case 3:
+                    device = row.Oven;
+                    break;
+                case 4:
+                    device = row.Fridge;
                     break;
             }
             return device;
+        }
+
+        public void UpdateDeviceById(int id, Device device)
+        {
+            DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
+            switch (row.DeviceTypeId)
+            {
+                case 1:
+                    if (device is Clock)
+                    {
+                        Clock clockState = (Clock) device;
+                        Clock newClock = row.Clock;
+                        if (newClock == null)
+                        {
+                            return;
+                        }
+                        newClock.CurrentTime = clockState.CurrentTime;
+                        newClock.IsOn = clockState.IsOn;
+                        newClock.Name = clockState.Name;
+                        _deviceContext.Entry(newClock).State = EntityState.Modified;
+                        _deviceContext.SaveChanges();
+                    }
+                    break;
+                case 2:
+                    if (device is Microwave)
+                    {
+                        Microwave microwaveState = (Microwave) device;
+                        Microwave newMicrowave = row.Microwave;
+                        if (newMicrowave == null)
+                        {
+                            return;
+                        }
+                        newMicrowave.CurrentTime = microwaveState.CurrentTime;
+                        newMicrowave.IsHighlighted = microwaveState.IsHighlighted;
+                        newMicrowave.IsOpen = microwaveState.IsHighlighted;
+                        newMicrowave.IsRunning = microwaveState.IsRunning;
+                        newMicrowave.LampPower = microwaveState.LampPower;
+                        newMicrowave.Volume = microwaveState.Volume;
+                        _deviceContext.Entry(newMicrowave).State = EntityState.Modified;
+                        _deviceContext.SaveChanges();
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
         }
 
         public SortedDictionary<int, Device> GetDevices()
@@ -77,26 +131,29 @@ namespace SmartHouseMVC.Models.DeviceManager
                 case "clock":
                     Clock clock = new Clock(name);
                     _deviceContext.Clocks.Add(clock);
-                    deviceTableRow = new DeviceTableRow{DeviceTypeId = 1, Clock = clock};
+                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 1, Clock = clock };
                     break;
                 default: return;
                 case "microwave":
                     MicrowaveInfo mi = microwaveInfo[fabricator];
                     Microwave microwave = new Microwave(name, mi.Volume, mi.Lamp);
+                    Clock builtInClock = new Clock();
+                    _deviceContext.Clocks.Add(builtInClock);
+                    microwave.Clock = builtInClock;
                     _deviceContext.Microwaves.Add(microwave);
-                    deviceTableRow = new DeviceTableRow{DeviceTypeId = 2, Microwave = microwave};
+                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 2, Microwave = microwave };
                     break;
                 case "oven":
                     OvenInfo oi = ovenInfo[fabricator];
                     Oven oven = new Oven(name, oi.Volume, oi.Lamp);
                     _deviceContext.Ovens.Add(oven);
-                    deviceTableRow = new DeviceTableRow{DeviceTypeId = 3, Oven = oven};
+                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 3, Oven = oven };
                     break;
                 case "fridge":
                     FridgeInfo fi = fridgeInfo[fabricator];
                     Fridge fridge = new Fridge(name, fi.Coldstore, fi.Freezer);
                     _deviceContext.Fridges.Add(fridge);
-                    deviceTableRow = new DeviceTableRow{DeviceTypeId = 4, Fridge = fridge};
+                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 4, Fridge = fridge };
                     break;
             }
             _deviceContext.DeviceTableRows.Add(deviceTableRow);
@@ -108,11 +165,6 @@ namespace SmartHouseMVC.Models.DeviceManager
             DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
             _deviceContext.DeviceTableRows.Remove(row);
             _deviceContext.SaveChanges();
-        }
-
-        public void UdpateDevice(Device device)
-        {
-
         }
 
         public string[] GetMicrowaveNames()
