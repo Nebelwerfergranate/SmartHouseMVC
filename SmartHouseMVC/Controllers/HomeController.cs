@@ -96,11 +96,11 @@ namespace SmartHouseMVC.Controllers
         }
 
         // IOpenable
-        public RedirectResult ToogleDoor(uint? id)
+        public RedirectResult ToogleDoor(int id = 0)
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is IOpenable)
                 {
                     IOpenable door = (IOpenable) device;
@@ -112,21 +112,23 @@ namespace SmartHouseMVC.Controllers
                     {
                         door.Open();
                     }
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
         
         // ITemperature
-        public RedirectResult SetTemperature(uint? id, double? temperature)
+        public RedirectResult SetTemperature(double? temperature, int id = 0)
         {
-            if (id != null && temperature != null)
+            if (id != 0 && temperature != null)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is ITemperature)
                 {
                     ((ITemperature) device).Temperature = (double)temperature;
                 }
+                db.UpdateDeviceById(id, device);
             }
             return Redirect("/Home/Index");
         }
@@ -179,11 +181,11 @@ namespace SmartHouseMVC.Controllers
         }
 
         // Fridge
-        public RedirectResult ToogleColdstoreDoor(uint? id)
+        public RedirectResult ToogleColdstoreDoor(int? id)
         {
             if (id != null)
             {
-                Device device = deviceManager.GetDeviceById((uint) id);
+                Device device = db.GetDeviceById((int) id);
                 if (device != null && device is Fridge)
                 {
                     Fridge fridge = (Fridge) device;
@@ -195,16 +197,17 @@ namespace SmartHouseMVC.Controllers
                     {
                         fridge.OpenColdstore();
                     }
+                    db.UpdateDeviceById((int)id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult ToogleFreezerDoor(uint? id)
+        public RedirectResult ToogleFreezerDoor(int? id)
         {
             if (id != null)
             {
-                Device device = deviceManager.GetDeviceById((uint) id);
+                Device device = db.GetDeviceById((int) id);
                 if (device != null && device is Fridge)
                 {
                     Fridge fridge = (Fridge)device;
@@ -216,33 +219,36 @@ namespace SmartHouseMVC.Controllers
                     {
                         fridge.OpenFreezer();
                     }
+                    db.UpdateDeviceById((int)id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult SetColdstoreTemperature(uint? id, double? temperature)
+        public RedirectResult SetColdstoreTemperature(int? id, double? temperature)
         {
             if (id != null && temperature != null)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById((int)id);
                 if (device != null && device is Fridge)
                 {
                     ((Fridge) device).ColdstoreTemperature = (double)temperature;
                 }
+                db.UpdateDeviceById((int)id, device);
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult SetFreezerTemperature(uint? id, double? temperature)
+        public RedirectResult SetFreezerTemperature(int? id, double? temperature)
         {
             if (id != null && temperature != null)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById((int)id);
                 if (device != null && device is Fridge)
                 {
                     ((Fridge) device).FreezerTemperature = (double) temperature;
                 }
+                db.UpdateDeviceById((int)id, device);
             }
             return Redirect("/Home/Index");
         }

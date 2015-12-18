@@ -51,7 +51,7 @@ namespace SmartHouse
 
 
         // Properties
-        public int MicrowaveBuiltInClockId { get; set; }
+        public int ClockId { get; set; }
 
         public virtual Clock Clock { get; set; }
         [NotMapped]
