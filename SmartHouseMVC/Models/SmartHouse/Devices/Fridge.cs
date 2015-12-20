@@ -8,7 +8,10 @@ namespace SmartHouse
 
         // Constructors
         public Fridge()
-        { }
+        {
+            Coldstore = new Coldstore();
+            Freezer = new Freezer();
+        }
         public Fridge(string name, Coldstore coldstore, Freezer freezer)
             : base(name)
         {
@@ -18,19 +21,19 @@ namespace SmartHouse
 
 
         // Properties
-        public int ColdstoreId { get; set; }
-        public virtual Coldstore Coldstore { get; set; }
-
-        public int FreezerId { get; set; }
-        public virtual Freezer Freezer { get; set; }
-     
         [NotMapped]
+        public  Coldstore Coldstore { get; set; }
+
+        [NotMapped]
+        public Freezer Freezer { get; set; }
+     
+        
         public bool ColdstoreIsOpen
         {
             get { return Coldstore.IsOpen; }
             set { Coldstore.IsOpen = value; }
         }
-        [NotMapped]
+        
         public double ColdstoreTemperature
         {
             get { return Coldstore.Temperature; }
@@ -46,31 +49,31 @@ namespace SmartHouse
         {
             get { return Coldstore.MaxTemperature; }
         }
-        [NotMapped]
+    
         public bool ColdstoreIsHighlighted
         {
             get { return Coldstore.IsHighlighted; }
             set { Coldstore.IsHighlighted = value; }
         }
-        [NotMapped]
+        
         public double ColdstoreLampPower
         {
             get { return Coldstore.LampPower; }
             set { Coldstore.LampPower = value; }
         }
-        [NotMapped]
+        
         public double ColdstoreVolume
         {
             get { return Coldstore.Volume; }
             set { Coldstore.Volume = value; }
         }
-        [NotMapped]
+        
         public bool FreezerIsOpen
         {
             get { return Freezer.IsOpen; }
             set { Freezer.IsOpen = value; }
         }
-        [NotMapped]
+        
         public double FreezerTemperature
         {
             get { return Freezer.Temperature; }
@@ -86,7 +89,7 @@ namespace SmartHouse
         {
             get { return Freezer.MaxTemperature; }
         }
-        [NotMapped]
+       
         public double FreezerVolume
         {
             get { return Freezer.Volume; }

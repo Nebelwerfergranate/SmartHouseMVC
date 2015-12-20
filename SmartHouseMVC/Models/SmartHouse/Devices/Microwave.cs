@@ -19,7 +19,10 @@ namespace SmartHouse
 
 
         // Constructors
-        public Microwave() { }
+        public Microwave()
+        {
+            Clock = new Clock();
+        }
         public Microwave(string name, double volume, Lamp lamp)
             : base(name)
         {
@@ -36,15 +39,20 @@ namespace SmartHouse
             ElapsedTime = DateTime.Now;
         }
 
-        // Properties
-        public int ClockId { get; set; }
-
-        public virtual Clock Clock { get; set; }
+        [NotMapped]
+        public Clock Clock { get; set; }
+        
         [NotMapped]
         public DateTime CurrentTime
         {
             get { return Clock.CurrentTime; }
             set { Clock.CurrentTime = value; }
+        }
+
+        public long Delta
+        {
+            get { return Clock.Delta; }
+            set { Clock.Delta = value; }
         }
 
         public bool IsRunning

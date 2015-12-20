@@ -29,6 +29,10 @@ namespace SmartHouseMVC.Models.DeviceManager
         public Device GetDeviceById(int id)
         {
             DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
+            if (row == null)
+            {
+                return null;
+            }
             Device device = null;
             switch (row.DeviceTypeId)
             {
@@ -53,6 +57,10 @@ namespace SmartHouseMVC.Models.DeviceManager
         public void UpdateDeviceById(int id, Device device)
         {
             DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
+            if (row == null)
+            {
+                return;
+            }
             switch (row.DeviceTypeId)
             {
                 case 1:
@@ -108,13 +116,9 @@ namespace SmartHouseMVC.Models.DeviceManager
                     _deviceContext.Clocks.Add(clock);
                     deviceTableRow = new DeviceTableRow { DeviceTypeId = 1, Clock = clock };
                     break;
-                default: return;
                 case "microwave":
                     MicrowaveInfo mi = microwaveInfo[fabricator];
                     Microwave microwave = new Microwave(name, mi.Volume, mi.Lamp);
-                    Clock builtInClock = new Clock();
-                    _deviceContext.Clocks.Add(builtInClock);
-                    microwave.Clock = builtInClock;
                     _deviceContext.Microwaves.Add(microwave);
                     deviceTableRow = new DeviceTableRow { DeviceTypeId = 2, Microwave = microwave };
                     break;
@@ -130,6 +134,7 @@ namespace SmartHouseMVC.Models.DeviceManager
                     _deviceContext.Fridges.Add(fridge);
                     deviceTableRow = new DeviceTableRow { DeviceTypeId = 4, Fridge = fridge };
                     break;
+                default: return;
             }
             _deviceContext.DeviceTableRows.Add(deviceTableRow);
             _deviceContext.SaveChanges();
@@ -138,6 +143,29 @@ namespace SmartHouseMVC.Models.DeviceManager
         public void RemoveById(int id)
         {
             DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
+            if (row == null)
+            {
+                return;
+            }
+
+            Device device = GetDeviceById(id);
+
+            if (device is Clock)
+            {
+                _deviceContext.Clocks.Remove((Clock)device);
+            }
+            else if (device is Microwave)
+            {
+                _deviceContext.Microwaves.Remove((Microwave)device);
+            }
+            else if (device is Oven)
+            {
+                _deviceContext.Ovens.Remove((Oven)device);
+            }
+            else if (device is Fridge)
+            {
+                _deviceContext.Fridges.Remove((Fridge)device);
+            }
             _deviceContext.DeviceTableRows.Remove(row);
             _deviceContext.SaveChanges();
         }

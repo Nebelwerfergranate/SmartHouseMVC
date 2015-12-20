@@ -20,6 +20,6 @@ namespace SmartHouseMVC.Models.Contexts
         public DbSet<Clock> Clocks { get; set; }
         public DbSet<Microwave> Microwaves { get; set; }
         public DbSet<Oven> Ovens { get; set; }
-        public DbSet<Fridge> Fridges { get; set; } 
+        public DbSet<Fridge> Fridges { get; set; }
     }
 }
