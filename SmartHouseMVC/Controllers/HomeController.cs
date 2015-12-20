@@ -12,7 +12,6 @@ namespace SmartHouseMVC.Controllers
     public class HomeController : Controller
     {
         // Fields
-        //private SessionDeviceManager deviceManager = new SessionDeviceManager();
         private DatabaseDeviceManager db = new DatabaseDeviceManager();
 
         // GET: Home

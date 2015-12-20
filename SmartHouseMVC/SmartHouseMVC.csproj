@@ -125,7 +125,6 @@
     <Compile Include="Models\DeviceManager\FridgeInfo.cs" />
     <Compile Include="Models\DeviceManager\MicrowaveInfo.cs" />
     <Compile Include="Models\DeviceManager\OvenInfo.cs" />
-    <Compile Include="Models\DeviceManager\SessionDeviceManager.cs" />
     <Compile Include="Models\SmartHouse\Delegates\OperationDelegate.cs" />
     <Compile Include="Models\SmartHouse\Devices\Clock.cs" />
     <Compile Include="Models\SmartHouse\Devices\Coldstore.cs" />

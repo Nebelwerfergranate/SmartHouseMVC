@@ -10,6 +10,7 @@ namespace SmartHouse
         private double volume;
 
         private bool isRunning;
+        private TimeSpan remainTime;
 
         private double temperature = 110;
         private readonly double minTemperature = 110;
@@ -76,7 +77,22 @@ namespace SmartHouse
             set { backlight.Power = value; }
         }
 
-        public TimeSpan RemainTime { get; set; }
+        public TimeSpan RemainTime
+        {
+            get
+            {
+                if (IsRunning)
+                {
+                    return ElapsedTime - DateTime.Now;
+                }
+                else
+                {
+                    return remainTime;
+                }
+            }
+            set { remainTime = value; }
+        }
+
         public DateTime ElapsedTime { get; set; }
 
         public bool IsRunning
