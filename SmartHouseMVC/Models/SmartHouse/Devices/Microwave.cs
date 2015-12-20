@@ -11,10 +11,11 @@ namespace SmartHouse
 
         private double volume;
 
-        private readonly System.Timers.Timer timer = new System.Timers.Timer();
         private bool isRunning;
+        private TimeSpan remainTime;
 
         private bool isOpen;
+
 
 
         // Constructors
@@ -32,23 +33,8 @@ namespace SmartHouse
             {
                 this.volume = volume;
             }
-            timer.AutoReset = false;
-            timer.Elapsed += (sourse, eventArgs) =>
-            {
-                if (OperationDone != null && this.IsOn)
-                {
-                    OperationDone.Invoke(this);
-                    isRunning = false;
-                    lamp.TurnOff();
-                    ResetTimer();
-                }
-            };
+            ElapsedTime = DateTime.Now;
         }
-
-
-        // Events
-        public event OperationDoneDelegate OperationDone;
-
 
         // Properties
         public int ClockId { get; set; }
@@ -65,6 +51,24 @@ namespace SmartHouse
         {
             get { return isRunning; }
             set { isRunning = value; }
+        }
+
+        public DateTime ElapsedTime { get; set; }
+
+        public TimeSpan RemainTime
+        {
+            get
+            {
+                if (IsRunning)
+                {
+                    return ElapsedTime - DateTime.Now;
+                }
+                else
+                {
+                    return remainTime;
+                }
+            }
+            set { remainTime = value; }
         }
 
         public bool IsOpen
@@ -110,35 +114,51 @@ namespace SmartHouse
             Clock.TurnOff();
         }
 
+        public void CheckIsReady()
+        {
+            if (ElapsedTime <= DateTime.Now)
+            {
+                if (IsRunning)
+                {
+                    Stop();
+                }
+            }
+        }
         public void SetTimer(TimeSpan time)
         {
             if (this.isOn)
             {
-                int miliSeconds = time.Seconds * 1000 + time.Minutes * 60 * 1000;
-                if (miliSeconds > 0)
+                RemainTime = time;
+                if (IsRunning)
                 {
-                    timer.Interval = miliSeconds;
+                    ElapsedTime = DateTime.Now + RemainTime;
                 }
             }
         }
         public void Start()
         {
-            if (this.isOn && !IsOpen && timer.Interval > 999)
+            if (this.isOn && !IsOpen && RemainTime.TotalSeconds > 0)
             {
-                timer.Start();
+                ElapsedTime = DateTime.Now + RemainTime;
                 isRunning = true;
                 backlight.TurnOn();
             }
         }
-        public void Stop()
+
+        public void Pause()
         {
-            timer.Stop();
-            ResetTimer();
+            ElapsedTime = DateTime.Now;
             isRunning = false;
             if (!this.IsOpen)
             {
                 backlight.TurnOff();
             }
+        }
+
+        public void Stop()
+        {
+            Pause();
+            RemainTime = new TimeSpan();
         }
 
         public void Open()
@@ -148,20 +168,12 @@ namespace SmartHouse
             {
                 backlight.TurnOn();
             }
-            this.Stop();
+            this.Pause();
         }
         public void Close()
         {
             isOpen = false;
             backlight.TurnOff();
-        }
-
-        private void ResetTimer()
-        {
-            // Сбросить значение таймера. Нуль установить нельзя, но метод Start() проверяет, 
-            // что бы установленное значение было больше 999. 
-            // Установка значение в интервал от 1 до 998 предотвратит запуск.
-            timer.Interval = 1;
         }
     }
 }

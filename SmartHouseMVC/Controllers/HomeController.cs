@@ -12,15 +12,15 @@ namespace SmartHouseMVC.Controllers
     public class HomeController : Controller
     {
         // Fields
-        private SessionDeviceManager deviceManager = new SessionDeviceManager();
+        //private SessionDeviceManager deviceManager = new SessionDeviceManager();
         private DatabaseDeviceManager db = new DatabaseDeviceManager();
 
         // GET: Home
         public ActionResult Index()
         {
-            string[] microwaveNames = deviceManager.GetMicrowaveNames();
-            string[] ovenNames = deviceManager.GetOvenNames();
-            string[] fridgeNames = deviceManager.GetFridgeNames();
+            string[] microwaveNames = db.GetMicrowaveNames();
+            string[] ovenNames = db.GetOvenNames();
+            string[] fridgeNames = db.GetFridgeNames();
 
             ViewBag.microwaveNames = microwaveNames;
             ViewBag.ovenNames = ovenNames;
@@ -35,15 +35,15 @@ namespace SmartHouseMVC.Controllers
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult RenameDevice(int? id, string newName = "")
+        public RedirectResult RenameDevice(int id = 0, string newName = "")
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = db.GetDeviceById((int)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null)
                 {
                     device.Name = newName;
-                    db.UpdateDeviceById((int)id, device);
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
@@ -59,11 +59,11 @@ namespace SmartHouseMVC.Controllers
         }
 
         // Device
-        public RedirectResult ToogleDevice(int? id)
+        public RedirectResult ToogleDevice(int id)
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = db.GetDeviceById((int)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null)
                 {
                     if (device.IsOn)
@@ -74,22 +74,22 @@ namespace SmartHouseMVC.Controllers
                     {
                         device.TurnOn();
                     }
-                    db.UpdateDeviceById((int)id, device);
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
         
         //IClock
-        public RedirectResult SetTime(int? id, uint? hours, uint? minutes)
+        public RedirectResult SetTime(uint? hours, uint? minutes, int id = 0)
         {
-            if (id != null && hours != null && minutes != null && hours < 24 && minutes < 60)
+            if (id != 0 && hours != null && minutes != null && hours < 24 && minutes < 60)
             {
-                Device device = db.GetDeviceById((int)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is IClock)
                 {
                     ((IClock)device).CurrentTime = new DateTime(1, 1, 1, (int)hours, (int)minutes, 0);
-                    db.UpdateDeviceById((int)id, device);
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
@@ -134,7 +134,7 @@ namespace SmartHouseMVC.Controllers
         }
 
         // ITimer
-        public RedirectResult TimerSet(uint? id, uint? hours, uint? minutes, uint? seconds)
+        public RedirectResult TimerSet(uint? hours, uint? minutes, uint? seconds, int id = 0)
         {
             if (hours == null)
             {
@@ -148,44 +148,66 @@ namespace SmartHouseMVC.Controllers
             {
                 seconds = 0;
             }
-            if (id != null && hours < 24 && minutes < 60 && seconds < 60)
+            if (id != 0 && hours < 24 && minutes < 60 && seconds < 60)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is ITimer)
                 {
                     ((ITimer)device).SetTimer(new TimeSpan((int)hours, (int)minutes, (int)seconds));
                 }
+                db.UpdateDeviceById(id, device);
+            }
+            return Redirect("/Home/Index");
+        }
+        
+        public RedirectResult StartTimer(int id = 0)
+        {
+            if (id != 0)
+            {
+                Device device = db.GetDeviceById(id);
+                if (device != null && device is ITimer)
+                {
+                    ((ITimer)device).Start();
+                }
+                db.UpdateDeviceById(id, device);
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult ToogleTimer(uint? id)
+        public RedirectResult PauseTimer(int id = 0)
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = deviceManager.GetDeviceById((uint)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is ITimer)
                 {
-                    ITimer iTimerObj = (ITimer) device;
-                    if (iTimerObj.IsRunning)
-                    {
-                        iTimerObj.Stop();
-                    }
-                    else
-                    {
-                        iTimerObj.Start();
-                    }
+                    ((ITimer)device).Pause();
                 }
+                db.UpdateDeviceById(id, device);
+            }
+            return Redirect("/Home/Index");
+        }
+
+        public RedirectResult StopTimer(int id = 0)
+        {
+            if (id != 0)
+            {
+                Device device = db.GetDeviceById(id);
+                if (device != null && device is ITimer)
+                {
+                    ((ITimer)device).Stop();
+                }
+                db.UpdateDeviceById(id, device);
             }
             return Redirect("/Home/Index");
         }
 
         // Fridge
-        public RedirectResult ToogleColdstoreDoor(int? id)
+        public RedirectResult ToogleColdstoreDoor(int id = 0)
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = db.GetDeviceById((int) id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is Fridge)
                 {
                     Fridge fridge = (Fridge) device;
@@ -197,17 +219,17 @@ namespace SmartHouseMVC.Controllers
                     {
                         fridge.OpenColdstore();
                     }
-                    db.UpdateDeviceById((int)id, device);
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult ToogleFreezerDoor(int? id)
+        public RedirectResult ToogleFreezerDoor(int id = 0)
         {
-            if (id != null)
+            if (id != 0)
             {
-                Device device = db.GetDeviceById((int) id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is Fridge)
                 {
                     Fridge fridge = (Fridge)device;
@@ -219,36 +241,36 @@ namespace SmartHouseMVC.Controllers
                     {
                         fridge.OpenFreezer();
                     }
-                    db.UpdateDeviceById((int)id, device);
+                    db.UpdateDeviceById(id, device);
                 }
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult SetColdstoreTemperature(int? id, double? temperature)
+        public RedirectResult SetColdstoreTemperature(double? temperature, int id = 0)
         {
-            if (id != null && temperature != null)
+            if (id != 0 && temperature != null)
             {
-                Device device = db.GetDeviceById((int)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is Fridge)
                 {
                     ((Fridge) device).ColdstoreTemperature = (double)temperature;
                 }
-                db.UpdateDeviceById((int)id, device);
+                db.UpdateDeviceById(id, device);
             }
             return Redirect("/Home/Index");
         }
 
-        public RedirectResult SetFreezerTemperature(int? id, double? temperature)
+        public RedirectResult SetFreezerTemperature(double? temperature, int id = 0)
         {
-            if (id != null && temperature != null)
+            if (id != 0 && temperature != null)
             {
-                Device device = db.GetDeviceById((int)id);
+                Device device = db.GetDeviceById(id);
                 if (device != null && device is Fridge)
                 {
                     ((Fridge) device).FreezerTemperature = (double) temperature;
                 }
-                db.UpdateDeviceById((int)id, device);
+                db.UpdateDeviceById(id, device);
             }
             return Redirect("/Home/Index");
         }

@@ -3,17 +3,22 @@
 namespace SmartHouse
 {
     public interface ITimer
-    {
-        event SmartHouse.OperationDoneDelegate OperationDone;
-    
+    { 
         bool IsRunning
         {
             get;
         }
 
+        DateTime ElapsedTime { get; }
+        TimeSpan RemainTime { get; }
+        
+        void CheckIsReady();
+
         void SetTimer(TimeSpan time);
 
         void Start();
+        
+        void Pause();
 
         void Stop();
     }

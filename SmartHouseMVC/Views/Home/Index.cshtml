@@ -97,9 +97,9 @@
                         <img src="~/Content/Images/off.png" alt="Toggle" class="toogle-button" />
                     }
                 </a>
-                <a href="/Home/RemoveDevice?id=@deviceId"><img src="~/Content/Images/remove.png" alt="Remove" class="rename-button" /></a>
                 <input type="image" src="~/Content/Images/rename.png" alt="Rename" onclick="rename(@deviceId, '@device.Name')"
-                       class="remove-button" title="Rename device" />
+                       class="rename-button" title="Rename device" />
+                <a href="/Home/RemoveDevice?id=@deviceId"><img src="~/Content/Images/remove.png" alt="Remove" class="remove-button" /></a>
             </div>
             <div class="device-name">
                 <span id="Name" class="device-name-label">@device.Name</span>
@@ -239,16 +239,23 @@
                             <input type="number" maxlength="2" min="0" max="59"
                                    name="seconds" />
                             <input type="submit" value="Set Timer" />
-                            <a href="/Home/ToogleTimer?id=@deviceId">
-                                @if (((ITimer)device).IsRunning)
-                                {
-                                    <img src="~/Content/Images/stop.png" alt="Running" />
-                                }
-                                else
-                                {
-                                    <img src="~/Content/Images/start.png" alt="Running" title="Don't forget to set the timer" />
-                                }
-                            </a>
+
+                            if (((ITimer)device).IsRunning)
+                            {
+                                <a href="/Home/PauseTimer?id=@deviceId">
+                                    <img src="~/Content/Images/pause.png" alt="Pause button" class="itimer-left-button"/>
+                                </a>
+                                <a href="/Home/StopTimer?id=@deviceId">
+                                    <img src="~/Content/Images/stop.png" alt="Stop button" class="itimer-right-button" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/Home/StartTimer?id=@deviceId">
+                                    <img src="~/Content/Images/start.png" alt="Start button" class="itimer-middle-button" title="Don't forget to set the timer" />
+                                </a>
+                            }
+
                         }
                     </div>
                 }

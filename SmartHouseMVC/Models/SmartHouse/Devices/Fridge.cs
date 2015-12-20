@@ -12,8 +12,8 @@ namespace SmartHouse
         public Fridge(string name, Coldstore coldstore, Freezer freezer)
             : base(name)
         {
-            this.Coldstore = new Coldstore();
-            this.Freezer = new Freezer();
+            this.Coldstore = coldstore;
+            this.Freezer = freezer;
         }
 
 

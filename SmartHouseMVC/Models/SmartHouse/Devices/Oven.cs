@@ -7,8 +7,6 @@ namespace SmartHouse
         // Fields
         private readonly Lamp backlight = new Lamp();
 
-        private readonly System.Timers.Timer timer = new System.Timers.Timer();
-
         private double volume;
 
         private bool isRunning;
@@ -18,11 +16,12 @@ namespace SmartHouse
         private readonly double maxTemperature = 250;
 
         private bool isOpen;
-        
+
 
         // Constructors
         public Oven() { }
-        public Oven(string name, double volume, Lamp lamp) : base(name)
+        public Oven(string name, double volume, Lamp lamp)
+            : base(name)
         {
             this.backlight = lamp;
             if (volume < 10)
@@ -33,25 +32,8 @@ namespace SmartHouse
             {
                 this.volume = volume;
             }
-            timer.AutoReset = false;
-            timer.Elapsed += (sourse, eventArgs) =>
-            {
-                if (OperationDone != null && this.IsOn)
-                {
-                    OperationDone.Invoke(this);
-                    isRunning = false;
-                    if (!isOpen)
-                    {
-                        lamp.TurnOff();
-                    }
-                    ResetTimer();
-                }
-            };
+            ElapsedTime = DateTime.Now;
         }
-
-
-        // Events
-        public event OperationDoneDelegate OperationDone;
 
 
         // Properties
@@ -93,6 +75,9 @@ namespace SmartHouse
             get { return backlight.Power; }
             set { backlight.Power = value; }
         }
+
+        public TimeSpan RemainTime { get; set; }
+        public DateTime ElapsedTime { get; set; }
 
         public bool IsRunning
         {
@@ -138,46 +123,50 @@ namespace SmartHouse
             }
         }
 
-
+        public void CheckIsReady()
+        {
+            if (ElapsedTime <= DateTime.Now)
+            {
+                if (IsRunning)
+                {
+                    Stop();
+                }
+            }
+        }
         public void SetTimer(TimeSpan time)
         {
             if (this.isOn)
             {
-                int miliSeconds = time.Seconds * 1000 + time.Minutes * 60 * 1000 + time.Hours * 60 * 60 * 1000;
-                if (miliSeconds > 0)
+                RemainTime = time;
+                if (IsRunning)
                 {
-                    timer.Interval = miliSeconds;
+                    ElapsedTime = DateTime.Now + RemainTime;
                 }
             }
         }
         public void Start()
         {
-            // В отличие от микроволновки духовку можно открывать.
-            if (this.isOn && timer.Interval > 999)
+            if (this.isOn && RemainTime.TotalSeconds > 0)
             {
-                timer.Start();
+                ElapsedTime = DateTime.Now + RemainTime;
                 isRunning = true;
                 backlight.TurnOn();
             }
         }
 
-        public void Stop()
+        public void Pause()
         {
-            timer.Stop();
-            ResetTimer();
+            ElapsedTime = DateTime.Now;
             isRunning = false;
             if (!this.IsOpen)
             {
                 backlight.TurnOff();
             }
         }
-
-        private void ResetTimer()
+        public void Stop()
         {
-            // Сбросить значение таймера. Нуль установить нельзя, но метод Start() проверяет, 
-            // что бы установленное значение было больше 999. 
-            // Установка значение в интервал от 1 до 998 предотвратит запуск.
-            timer.Interval = 1;
+            Pause();
+            RemainTime = new TimeSpan();
         }
     }
 }

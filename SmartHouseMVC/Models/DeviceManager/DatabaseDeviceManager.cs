@@ -10,7 +10,7 @@ using SmartHouseWF.Models.DeviceManager;
 
 namespace SmartHouseMVC.Models.DeviceManager
 {
-    public class DatabaseDeviceManager// : IDisposable
+    public class DatabaseDeviceManager : IDisposable
     {
 
         private DeviceContext _deviceContext = new DeviceContext();
@@ -37,9 +37,11 @@ namespace SmartHouseMVC.Models.DeviceManager
                     break;
                 case 2:
                     device = row.Microwave;
+                    ((ITimer)device).CheckIsReady();
                     break;
                 case 3:
                     device = row.Oven;
+                    ((ITimer)device).CheckIsReady();
                     break;
                 case 4:
                     device = row.Fridge;
@@ -56,77 +58,28 @@ namespace SmartHouseMVC.Models.DeviceManager
                 case 1:
                     if (device is Clock)
                     {
-                        Clock clockState = (Clock)device;
-                        Clock newClock = row.Clock;
-                        if (newClock == null)
-                        {
-                            return;
-                        }
-                        newClock.CurrentTime = clockState.CurrentTime;
-                        newClock.IsOn = clockState.IsOn;
-                        newClock.Name = clockState.Name;
-                        _deviceContext.Entry(newClock).State = EntityState.Modified;
+                        _deviceContext.Entry((Clock)device).State = EntityState.Modified;
                         _deviceContext.SaveChanges();
                     }
                     break;
                 case 2:
                     if (device is Microwave)
                     {
-                        Microwave microwaveState = (Microwave)device;
-                        Microwave newMicrowave = row.Microwave;
-                        if (newMicrowave == null)
-                        {
-                            return;
-                        }
-                        newMicrowave.CurrentTime = microwaveState.CurrentTime;
-                        newMicrowave.IsHighlighted = microwaveState.IsHighlighted;
-                        newMicrowave.IsOpen = microwaveState.IsOpen;
-                        newMicrowave.IsRunning = microwaveState.IsRunning;
-                        newMicrowave.LampPower = microwaveState.LampPower;
-                        newMicrowave.Volume = microwaveState.Volume;
-                        _deviceContext.Entry(newMicrowave).State = EntityState.Modified;
+                        _deviceContext.Entry((Microwave)device).State = EntityState.Modified;
                         _deviceContext.SaveChanges();
                     }
                     break;
                 case 3:
                     if (device is Oven)
                     {
-                        Oven ovenState = (Oven)device;
-                        Oven newOven = row.Oven;
-                        if (newOven == null)
-                        {
-                            return;
-                        }
-                        newOven.IsHighlighted = ovenState.IsHighlighted;
-                        newOven.IsOpen = ovenState.IsOpen;
-                        newOven.IsRunning = ovenState.IsRunning;
-                        newOven.LampPower = ovenState.LampPower;
-                        newOven.Temperature = ovenState.Temperature;
-                        newOven.Volume = ovenState.Volume;
-                        _deviceContext.Entry(newOven).State = EntityState.Modified;
+                        _deviceContext.Entry((Oven)device).State = EntityState.Modified;
                         _deviceContext.SaveChanges();
                     }
                     break;
                 case 4:
                     if (device is Fridge)
                     {
-                        Fridge fridgeState = (Fridge) device;
-                        Fridge newFridge = row.Fridge;
-                        if (newFridge == null)
-                        {
-                            return;
-                        }
-                        newFridge.IsOn = fridgeState.IsOn;
-                        newFridge.Name = fridgeState.Name;
-                        newFridge.ColdstoreIsHighlighted = fridgeState.ColdstoreIsHighlighted;
-                        newFridge.ColdstoreIsOpen = fridgeState.ColdstoreIsOpen;
-                        newFridge.ColdstoreLampPower = fridgeState.ColdstoreLampPower;
-                        newFridge.ColdstoreTemperature = fridgeState.ColdstoreTemperature;
-                        newFridge.ColdstoreVolume = fridgeState.ColdstoreVolume;
-                        newFridge.FreezerVolume = fridgeState.FreezerVolume;
-                        newFridge.FreezerIsOpen = fridgeState.FreezerIsOpen;
-                        newFridge.FreezerTemperature = fridgeState.FreezerTemperature;
-                        _deviceContext.Entry(newFridge).State = EntityState.Modified;
+                        _deviceContext.Entry((Fridge)device).State = EntityState.Modified;
                         _deviceContext.SaveChanges();
                     }
                     break;
@@ -139,23 +92,7 @@ namespace SmartHouseMVC.Models.DeviceManager
             var deviceTable = _deviceContext.DeviceTableRows;
             foreach (DeviceTableRow deviceTableRow in deviceTable)
             {
-                Device device = null;
-                switch (deviceTableRow.DeviceTypeId)
-                {
-                    case 1:
-                        device = deviceTableRow.Clock;
-                        break;
-                    case 2:
-                        device = deviceTableRow.Microwave;
-                        break;
-                    case 3:
-                        device = deviceTableRow.Oven;
-                        break;
-                    case 4:
-                        device = deviceTableRow.Fridge;
-                        break;
-                }
-
+                Device device = GetDeviceById(deviceTableRow.Id);
                 devicesToReturn.Add(deviceTableRow.Id, device);
             }
             return devicesToReturn;
@@ -241,11 +178,11 @@ namespace SmartHouseMVC.Models.DeviceManager
             fridgeInfo["Indesit"] = new FridgeInfo(new Coldstore(233, new Lamp(15)), new Freezer(85));
             fridgeInfo["Atlant"] = new FridgeInfo(new Coldstore(202, new Lamp(15)), new Freezer(70));
         }
-        
 
-        //void IDisposable.Dispose()
-        //{
-        //    _deviceContext.Dispose();
-        //}
+
+        void IDisposable.Dispose()
+        {
+            _deviceContext.Dispose();
+        }
     }
 }

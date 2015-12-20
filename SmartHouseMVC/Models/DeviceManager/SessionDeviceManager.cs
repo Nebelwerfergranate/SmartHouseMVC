@@ -49,10 +49,6 @@ namespace SmartHouseWF.Models.DeviceManager
             }
             MicrowaveInfo mi = microwaveInfo[fabricator];
             Microwave microwave = new Microwave(name, mi.Volume, mi.Lamp);
-            microwave.OperationDone += (sender) =>
-            {
-                //throw new ApplicationException("Микроволновка отработала!!!");
-            };
             AddDevice(microwave);
         }
 
@@ -64,10 +60,6 @@ namespace SmartHouseWF.Models.DeviceManager
             }
             OvenInfo oi = ovenInfo[fabricator];
             Oven oven = new Oven(name, oi.Volume, oi.Lamp);
-            oven.OperationDone += (sender) =>
-            {
-                //throw new ApplicationException("Печка отработала!!!");
-            };
             AddDevice(oven);
         }
 

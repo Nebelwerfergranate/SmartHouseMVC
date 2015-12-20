@@ -99,6 +99,7 @@
     <Content Include="Content\Images\on.png" />
     <Content Include="Content\Images\opened.png" />
     <Content Include="Content\Images\oven.png" />
+    <Content Include="Content\Images\pause.png" />
     <Content Include="Content\Images\remove.png" />
     <Content Include="Content\Images\rename.png" />
     <Content Include="Content\Images\start.png" />
