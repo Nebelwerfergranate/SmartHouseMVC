@@ -19,7 +19,7 @@
         // Properties
         public virtual int Id { get; set; }
         public string Name {get; set; }
-        public bool IsOn
+        public virtual bool IsOn
         {
             get { return isOn; }
             set { isOn = value; }

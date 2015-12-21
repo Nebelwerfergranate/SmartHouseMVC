@@ -5,6 +5,7 @@ namespace SmartHouse
     public class Fridge : Device
     {
         // Fields
+        private bool isOn;
 
         // Constructors
         public Fridge()
@@ -21,19 +22,33 @@ namespace SmartHouse
 
 
         // Properties
+        public override bool IsOn
+        {
+            get { return isOn; }
+            set
+            {
+                isOn = value;
+                if (value)
+                {
+                    Coldstore.TurnOn();
+                    Freezer.TurnOn();
+                }
+            }
+        }
+
         [NotMapped]
-        public  Coldstore Coldstore { get; set; }
+        public Coldstore Coldstore { get; set; }
 
         [NotMapped]
         public Freezer Freezer { get; set; }
-     
-        
+
+
         public bool ColdstoreIsOpen
         {
             get { return Coldstore.IsOpen; }
             set { Coldstore.IsOpen = value; }
         }
-        
+
         public double ColdstoreTemperature
         {
             get { return Coldstore.Temperature; }
@@ -49,31 +64,31 @@ namespace SmartHouse
         {
             get { return Coldstore.MaxTemperature; }
         }
-    
+
         public bool ColdstoreIsHighlighted
         {
             get { return Coldstore.IsHighlighted; }
             set { Coldstore.IsHighlighted = value; }
         }
-        
+
         public double ColdstoreLampPower
         {
             get { return Coldstore.LampPower; }
             set { Coldstore.LampPower = value; }
         }
-        
+
         public double ColdstoreVolume
         {
             get { return Coldstore.Volume; }
             set { Coldstore.Volume = value; }
         }
-        
+
         public bool FreezerIsOpen
         {
             get { return Freezer.IsOpen; }
             set { Freezer.IsOpen = value; }
         }
-        
+
         public double FreezerTemperature
         {
             get { return Freezer.Temperature; }
@@ -89,7 +104,7 @@ namespace SmartHouse
         {
             get { return Freezer.MaxTemperature; }
         }
-       
+
         public double FreezerVolume
         {
             get { return Freezer.Volume; }
