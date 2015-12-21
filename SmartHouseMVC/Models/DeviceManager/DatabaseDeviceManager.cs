@@ -15,40 +15,40 @@ namespace SmartHouseMVC.Models.DeviceManager
 
         private DeviceContext _deviceContext = new DeviceContext();
 
-        private Dictionary<string, MicrowaveInfo> microwaveInfo = new Dictionary<string, MicrowaveInfo>();
-        private Dictionary<string, OvenInfo> ovenInfo = new Dictionary<string, OvenInfo>();
-        private Dictionary<string, FridgeInfo> fridgeInfo = new Dictionary<string, FridgeInfo>();
+        private Dictionary<string, MicrowaveFabricatorInfo> microwaveFabricatorInfo = new Dictionary<string, MicrowaveFabricatorInfo>();
+        private Dictionary<string, OvenFabricatorInfo> ovenFabricatorInfo = new Dictionary<string, OvenFabricatorInfo>();
+        private Dictionary<string, FridgeFabricatorInfo> fridgeFabricatorInfo = new Dictionary<string, FridgeFabricatorInfo>();
 
         public DatabaseDeviceManager()
         {
-            InitMicrowaveInfo();
-            InitOvenInfo();
-            InitFridgeInfo();
+            InitMicrowaveFabricatorInfo();
+            InitOvenFabricatorInfo();
+            InitFridgeFabricatorInfo();
         }
 
         public Device GetDeviceById(int id)
         {
-            DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
-            if (row == null)
+            DatabaseMapping databaseMapping = _deviceContext.DatabaseMappings.Find(id);
+            if (databaseMapping == null)
             {
                 return null;
             }
             Device device = null;
-            switch (row.DeviceTypeId)
+            switch (databaseMapping.DeviceTypeId)
             {
                 case 1:
-                    device = row.Clock;
+                    device = databaseMapping.Clock;
                     break;
                 case 2:
-                    device = row.Microwave;
+                    device = databaseMapping.Microwave;
                     ((ITimer)device).CheckIsReady();
                     break;
                 case 3:
-                    device = row.Oven;
+                    device = databaseMapping.Oven;
                     ((ITimer)device).CheckIsReady();
                     break;
                 case 4:
-                    device = row.Fridge;
+                    device = databaseMapping.Fridge;
                     break;
             }
             return device;
@@ -56,12 +56,12 @@ namespace SmartHouseMVC.Models.DeviceManager
 
         public void UpdateDeviceById(int id, Device device)
         {
-            DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
-            if (row == null)
+            DatabaseMapping databaseMapping = _deviceContext.DatabaseMappings.Find(id);
+            if (databaseMapping == null)
             {
                 return;
             }
-            switch (row.DeviceTypeId)
+            switch (databaseMapping.DeviceTypeId)
             {
                 case 1:
                     if (device is Clock)
@@ -97,53 +97,53 @@ namespace SmartHouseMVC.Models.DeviceManager
         public SortedDictionary<int, Device> GetDevices()
         {
             SortedDictionary<int, Device> devicesToReturn = new SortedDictionary<int, Device>();
-            var deviceTable = _deviceContext.DeviceTableRows;
-            foreach (DeviceTableRow deviceTableRow in deviceTable)
+            var databaseMappings = _deviceContext.DatabaseMappings;
+            foreach (DatabaseMapping item in databaseMappings)
             {
-                Device device = GetDeviceById(deviceTableRow.Id);
-                devicesToReturn.Add(deviceTableRow.Id, device);
+                Device device = GetDeviceById(item.Id);
+                devicesToReturn.Add(item.Id, device);
             }
             return devicesToReturn;
         }
 
         public void AddDevice(string device = "", string name = "", string fabricator = "")
         {
-            DeviceTableRow deviceTableRow = null;
+            DatabaseMapping databaseMapping = null;
             switch (device)
             {
                 case "clock":
                     Clock clock = new Clock(name);
                     _deviceContext.Clocks.Add(clock);
-                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 1, Clock = clock };
+                    databaseMapping = new DatabaseMapping { DeviceTypeId = 1, Clock = clock };
                     break;
                 case "microwave":
-                    MicrowaveInfo mi = microwaveInfo[fabricator];
+                    MicrowaveFabricatorInfo mi = microwaveFabricatorInfo[fabricator];
                     Microwave microwave = new Microwave(name, mi.Volume, mi.Lamp);
                     _deviceContext.Microwaves.Add(microwave);
-                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 2, Microwave = microwave };
+                    databaseMapping = new DatabaseMapping { DeviceTypeId = 2, Microwave = microwave };
                     break;
                 case "oven":
-                    OvenInfo oi = ovenInfo[fabricator];
+                    OvenFabricatorInfo oi = ovenFabricatorInfo[fabricator];
                     Oven oven = new Oven(name, oi.Volume, oi.Lamp);
                     _deviceContext.Ovens.Add(oven);
-                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 3, Oven = oven };
+                    databaseMapping = new DatabaseMapping { DeviceTypeId = 3, Oven = oven };
                     break;
                 case "fridge":
-                    FridgeInfo fi = fridgeInfo[fabricator];
+                    FridgeFabricatorInfo fi = fridgeFabricatorInfo[fabricator];
                     Fridge fridge = new Fridge(name, fi.Coldstore, fi.Freezer);
                     _deviceContext.Fridges.Add(fridge);
-                    deviceTableRow = new DeviceTableRow { DeviceTypeId = 4, Fridge = fridge };
+                    databaseMapping = new DatabaseMapping { DeviceTypeId = 4, Fridge = fridge };
                     break;
                 default: return;
             }
-            _deviceContext.DeviceTableRows.Add(deviceTableRow);
+            _deviceContext.DatabaseMappings.Add(databaseMapping);
             _deviceContext.SaveChanges();
         }
 
         public void RemoveById(int id)
         {
-            DeviceTableRow row = _deviceContext.DeviceTableRows.Find(id);
-            if (row == null)
+            DatabaseMapping databaseMapping = _deviceContext.DatabaseMappings.Find(id);
+            if (databaseMapping == null)
             {
                 return;
             }
@@ -166,45 +166,45 @@ namespace SmartHouseMVC.Models.DeviceManager
             {
                 _deviceContext.Fridges.Remove((Fridge)device);
             }
-            _deviceContext.DeviceTableRows.Remove(row);
+            _deviceContext.DatabaseMappings.Remove(databaseMapping);
             _deviceContext.SaveChanges();
         }
 
         public string[] GetMicrowaveNames()
         {
-            return microwaveInfo.Keys.ToArray();
+            return microwaveFabricatorInfo.Keys.ToArray();
         }
 
         public string[] GetOvenNames()
         {
-            return ovenInfo.Keys.ToArray();
+            return ovenFabricatorInfo.Keys.ToArray();
         }
 
         public string[] GetFridgeNames()
         {
-            return fridgeInfo.Keys.ToArray();
+            return fridgeFabricatorInfo.Keys.ToArray();
         }
 
 
-        private void InitMicrowaveInfo()
+        private void InitMicrowaveFabricatorInfo()
         {
-            microwaveInfo["Whirlpool"] = new MicrowaveInfo(20, new Lamp(25));
-            microwaveInfo["Panasonic"] = new MicrowaveInfo(19, new Lamp(20));
-            microwaveInfo["Lg"] = new MicrowaveInfo(23, new Lamp(25));
+            microwaveFabricatorInfo["Whirlpool"] = new MicrowaveFabricatorInfo(20, new Lamp(25));
+            microwaveFabricatorInfo["Panasonic"] = new MicrowaveFabricatorInfo(19, new Lamp(20));
+            microwaveFabricatorInfo["Lg"] = new MicrowaveFabricatorInfo(23, new Lamp(25));
         }
 
-        private void InitOvenInfo()
+        private void InitOvenFabricatorInfo()
         {
-            ovenInfo["Siemens"] = new OvenInfo(67, new Lamp(25));
-            ovenInfo["Electrolux"] = new OvenInfo(74, new Lamp(25));
-            ovenInfo["Pyramida"] = new OvenInfo(56, new Lamp(15));
+            ovenFabricatorInfo["Siemens"] = new OvenFabricatorInfo(67, new Lamp(25));
+            ovenFabricatorInfo["Electrolux"] = new OvenFabricatorInfo(74, new Lamp(25));
+            ovenFabricatorInfo["Pyramida"] = new OvenFabricatorInfo(56, new Lamp(15));
         }
 
-        private void InitFridgeInfo()
+        private void InitFridgeFabricatorInfo()
         {
-            fridgeInfo["Samsung"] = new FridgeInfo(new Coldstore(254, new Lamp(15)), new Freezer(92));
-            fridgeInfo["Indesit"] = new FridgeInfo(new Coldstore(233, new Lamp(15)), new Freezer(85));
-            fridgeInfo["Atlant"] = new FridgeInfo(new Coldstore(202, new Lamp(15)), new Freezer(70));
+            fridgeFabricatorInfo["Samsung"] = new FridgeFabricatorInfo(new Coldstore(254, new Lamp(15)), new Freezer(92));
+            fridgeFabricatorInfo["Indesit"] = new FridgeFabricatorInfo(new Coldstore(233, new Lamp(15)), new Freezer(85));
+            fridgeFabricatorInfo["Atlant"] = new FridgeFabricatorInfo(new Coldstore(202, new Lamp(15)), new Freezer(70));
         }
 
 

@@ -121,10 +121,10 @@
     <Compile Include="Models\Contexts\DeviceContext.cs" />
     <Compile Include="Models\Contexts\DeviceContextInitializer.cs" />
     <Compile Include="Models\DeviceManager\DatabaseDeviceManager.cs" />
-    <Compile Include="Models\DeviceManager\DeviceTableRow.cs" />
-    <Compile Include="Models\DeviceManager\FridgeInfo.cs" />
-    <Compile Include="Models\DeviceManager\MicrowaveInfo.cs" />
-    <Compile Include="Models\DeviceManager\OvenInfo.cs" />
+    <Compile Include="Models\DeviceManager\DatabaseMapping.cs" />
+    <Compile Include="Models\DeviceManager\FridgeFabricatorInfo.cs" />
+    <Compile Include="Models\DeviceManager\MicrowaveFabricatorInfo.cs" />
+    <Compile Include="Models\DeviceManager\OvenFabricatorInfo.cs" />
     <Compile Include="Models\SmartHouse\Devices\Clock.cs" />
     <Compile Include="Models\SmartHouse\Devices\Coldstore.cs" />
     <Compile Include="Models\SmartHouse\Devices\Device.cs" />

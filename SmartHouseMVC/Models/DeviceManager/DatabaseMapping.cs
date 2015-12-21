@@ -8,9 +8,9 @@ using SmartHouse;
 
 namespace SmartHouseMVC.Models.DeviceManager
 {
-    public class DeviceTableRow
+    public class DatabaseMapping
     {
-        public DeviceTableRow() { }
+        public DatabaseMapping() { }
 
 
         public int Id { get; set; }

@@ -16,7 +16,7 @@ namespace SmartHouseMVC.Models.Contexts
         }
         public DeviceContext() : base("DeviceConnection") { }
 
-        public DbSet<DeviceTableRow> DeviceTableRows { get; set; }
+        public DbSet<DatabaseMapping> DatabaseMappings { get; set; }
         public DbSet<Clock> Clocks { get; set; }
         public DbSet<Microwave> Microwaves { get; set; }
         public DbSet<Oven> Ovens { get; set; }
