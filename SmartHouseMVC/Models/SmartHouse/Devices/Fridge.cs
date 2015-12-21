@@ -5,7 +5,6 @@ namespace SmartHouse
     public class Fridge : Device
     {
         // Fields
-        private bool isOn;
 
         // Constructors
         public Fridge()
